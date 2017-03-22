@@ -1,0 +1,25 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">
+      #{msgs.tituloHead}
+    </ui:define>
+
+	<ui:define name="cuerpo">
+		<h:form id="form-principal">
+		<p:panel header="#{msgs.tituloOperacionError}">
+		 <h1>#{msgs.mensajeError1}</h1>
+		 <p>#{msgs.mensajeError2}</p>
+		 <p>#{msgs.mensajeError3}</p>
+		 </p:panel>
+		 </h:form>
+	</ui:define>
+
+	<ui:define name="pie">
+		<ui:include src="/snippets/pie-casa.xhtml" />
+	</ui:define>
+
+</ui:composition>

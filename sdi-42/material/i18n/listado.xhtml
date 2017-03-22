@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<!-- Si que si quisiera tomar el idioma del navegador -->
+<!-- <f:view locale="#{facesContext.externalContext.requestLocale}">  -->
+<!-- Para tomar el idioma del bean de configuración beanSettings  -->
+<f:view locale="#{settings.locale}">
+
+	<h:head>
+		<title>#{msgs.tituloHead}</title>
+	</h:head>
+	<h:body>
+		<center>
+			<h1>#{msgs.tituloAplicacion1}</h1>
+			<br />
+			<h2>#{msgs.tituloAplicacion2}</h2>
+			<br />
+			<h3>#{msgs.tituloOperacionListado}</h3>
+			<br />
+		</center>
+		<h:form>
+			<p:menubar>
+				<p:submenu label="#{msgs.tituloOpciones}" icon="ui-icon-document">
+					<p:menuitem value="#{msgs.enlaceListado}"
+						action="#{controller.listado}" />
+					<p:separator />
+					<p:menuitem value="#{msgs.enlaceAlta}" action="alta"
+						actionListener="#{controller.iniciaAlumno}" />
+				</p:submenu>
+			</p:menubar>
+			<p:dataTable var="alumno" value="#{controller.alumnos}" border="1">
+				<p:column>
+					<f:facet name="header">#{msgs.tablaNombre}</f:facet>#{alumno.nombre}</p:column>
+				<p:column>
+					<f:facet name="header">#{msgs.tablaApellidos}</f:facet>#{alumno.apellidos}</p:column>
+				<p:column>
+					<f:facet name="header">#{msgs.tablaIdUser}</f:facet>#{alumno.iduser}</p:column>
+				<p:column>
+					<f:facet name="header">#{msgs.tablaCorreo}</f:facet>#{alumno.email}</p:column>
+				<p:column>
+					<f:facet name="header">#{msgs.tablaBaja}</f:facet>
+					<h:commandLink action="#{controller.baja}" type="submit"
+						value="#{msgs.enlaceBaja}" immediate="true">
+						<f:setPropertyActionListener target="#{controller.alumno}"
+							value="#{alumno}" />
+					</h:commandLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header">#{msgs.tablaEditar}</f:facet>
+					<h:commandLink action="editar" type="submit"
+						value="#{msgs.enlaceEditar}" immediate="true">
+						<f:setPropertyActionListener target="#{controller.alumno}"
+							value="#{alumno}" />
+					</h:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</h:body>
+</f:view>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<!-- Si que si quisiera tomar el idioma del navegador -->      
+<!-- <f:view locale="#{facesContext.externalContext.requestLocale}">  -->
+<!-- Para tomar el idioma del bean de configuración beanSettings  -->
+<f:view locale="#{settings.locale}">
+
+<h:head>
+	<title>#{msgs.tituloHead}</title>
+</h:head>
+<h:body>
+	<center>
+		<h1>#{msgs.tituloAplicacion1}</h1>
+		<br />
+		<h2>#{msgs.tituloAplicacion2}</h2>
+	</center>
+	<h:form>
+		<p:menubar>
+			<p:submenu label="#{msgs.tituloOpciones}" icon="ui-icon-document">
+				<p:menuitem value="#{msgs.enlaceListado}"
+					action="#{controller.listado}" />
+				<p:separator />
+				<p:menuitem value="#{msgs.enlaceAlta}" action="alta"
+					actionListener="#{controller.iniciaAlumno}" />
+			</p:submenu>
+		</p:menubar>
+	</h:form>
+</h:body>
+</f:view>
+</html>
