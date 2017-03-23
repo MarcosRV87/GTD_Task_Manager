@@ -8,6 +8,12 @@
 	<ui:define name="titulo">
       #{msgs.tituloHead}
     </ui:define>
+    
+    <ui:define name="menubar">
+		<p:menubar id="menubar">
+			<ui:include src="/snippets/options.xhtml"/>
+		</p:menubar>
+	</ui:define>
 
 	<ui:define name="cuerpo">
 		<h:form id="form-principal">

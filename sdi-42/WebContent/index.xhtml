@@ -14,10 +14,12 @@
 			<p:panel>
 				<h:panelGrid columns="2">
 					<h:outputLabel for="login" value="Login:" />
-					<p:inputText id="login" required="true" label="Login" value="#{login.user.login}"/>
+					<p:inputText id="login" required="true" label="Login"
+						value="#{login.user.login}" />
 
 					<h:outputLabel for="password" value="Password:" />
-					<p:password id="password" required="true" label="Password" value="#{login.user.password}"/>
+					<p:password id="password" required="true" label="Password"
+						value="#{login.user.password}" />
 				</h:panelGrid>
 				<p:commandButton type="submit" value="#{msgs.botonAceptar}"
 					action="#{login.verify}" update="form-principal" />

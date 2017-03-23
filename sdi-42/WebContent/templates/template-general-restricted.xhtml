@@ -25,18 +25,7 @@
 					</th>
 				</tr>
 			</table>
-			<p:menubar>
-				<p:submenu style="float:right" label="#{msgs.textoIdioma}"
-					icon="ui-icon-document">
-					<p:menuitem value="#{msgs.enlaceIdiomaES}"
-						actionListener="#{settings.setSpanish}" update="@all" />
-					<p:menuitem value="#{msgs.enlaceIdiomaEN}"
-						actionListener="#{settings.setEnglish}" update="@all" />
-				</p:submenu>
-				<p:menuitem style="float:right" value="#{msgs.botonCerrarSesion}"
-					action="#{login.cerrarSesion}" />
-			</p:menubar>
-
+			<ui:insert name="menubar">#{msgs.tituloDefectoMenuBar}</ui:insert>
 		</h:form>
 
 		<ui:insert name="cuerpo">#{msgs.tituloDefectoCuerpo}</ui:insert>
