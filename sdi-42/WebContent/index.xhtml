@@ -8,6 +8,20 @@
 	<ui:define name="titulo">
       #{msgs.tituloHead}
     </ui:define>
+    
+    
+    <ui:define name="menubar">
+		<p:menubar id="menubar">
+			<p:menuitem value="#{msgs.registrarUsuario}" action="registrarUsuario"/>
+				<p:submenu style="float:right" label="#{msgs.textoIdioma}"
+					icon="ui-icon-document">
+					<p:menuitem value="#{msgs.enlaceIdiomaES}"
+						actionListener="#{settings.setSpanish}" update="@all" />
+					<p:menuitem value="#{msgs.enlaceIdiomaEN}"
+						actionListener="#{settings.setEnglish}" update="@all" />
+				</p:submenu>
+		</p:menubar>
+	</ui:define>
 
 	<ui:define name="cuerpo">
 		<h:form id="form-principal">

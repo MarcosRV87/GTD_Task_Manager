@@ -10,7 +10,7 @@
 		</resource-bundle>
 	</application>
 	<managed-bean>
-		<managed-bean-name>controller</managed-bean-name>
+		<managed-bean-name>users</managed-bean-name>
 		<managed-bean-class>com.sdi.presentation.BeanUsers</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
@@ -54,6 +54,14 @@
 			<from-action>#{login.verify}</from-action>
 			<from-outcome>fracaso</from-outcome>
 			<to-view-id>/index.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/restricted/principalAdmin.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{users.listado}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/restricted/listUsers.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 </faces-config>

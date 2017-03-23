@@ -1,6 +1,7 @@
 package com.sdi.presentation;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
@@ -16,7 +17,7 @@ import com.sdi.dto.User;
 import com.sdi.infrastructure.Factories;
 import com.sdi.presentation.impl.BeanFactoryImp;
 
-@ManagedBean(name = "controller")
+@ManagedBean(name = "users")
 @SessionScoped
 public class BeanUsers implements Serializable {
 	private static final long serialVersionUID = 55555L;
@@ -39,14 +40,14 @@ public class BeanUsers implements Serializable {
 		this.user = user;
 	}
 
-	private User[] users = null;
+	private List<User> users = null;
 
 /*	SUPRIMIDO EJERCICIO 21-c
  * public BeanUsers() {
 		iniciaUser(null);
 	}*/
 
-	public User[] getUsers() {
+	public List<User> getUsers() {
 		return (users);
 	}
 
@@ -55,7 +56,7 @@ public class BeanUsers implements Serializable {
 	 * User getUser() { return user; }
 	 */
 
-	public void setUsers(User[] users) {
+	public void setUsers(List<User> users) {
 		this.users = users;
 	}
 
@@ -76,12 +77,8 @@ public class BeanUsers implements Serializable {
 	public String listado() {
 		UserService service;
 		try {
-			// Acceso a la implementacion de la capa de negocio
-			// a trav��s de la factor��a
 			service = Factories.services.getUserService();
-			// De esta forma le damos informaci��n a toArray para poder hacer el
-			// casting a User[]
-			users = (User[]) service.findAll().toArray(new User[0]);
+			users = service.findAll();
 
 			return "exito"; // Nos vamos a la vista listado.xhtml
 
@@ -145,7 +142,7 @@ public class BeanUsers implements Serializable {
 				service.updateUserDetails(user);
 			}
 			// Actualizamos el javabean de users inyectado en la tabla
-			users = (User[]) service.findAll().toArray(new User[0]);
+			users = service.findAll();
 			return "exito"; // Nos vamos a la vista de listado.
 
 		} catch (Exception e) {

@@ -17,14 +17,22 @@
 
 	<ui:define name="cuerpo">
 		<h:form id="form-principal">
-			<p>Bienvenido a tu Gestor de Tareas, #{LOGGEDIN_USER.login}!</p>
-			<p>Escoge una de las opciones en la barra de navegación para la
-				gestión de tareas.</p>
+		<br/>
+		<br/>
+			<p:dataTable id="usersTable" var="user" value="#{users.users}"
+				rows="5">
+				<f:facet name="header">
+					<h:outputText value="#{msgs.labelListadoUsuarios}" />
+				</f:facet>
+				<p:column><f:facet name="header">#{msgs.headerUserId}</f:facet>#{user.id}</p:column>
+				<p:column><f:facet name="header">#{msgs.headerEmail}</f:facet>#{user.email}</p:column>
+				<p:column><f:facet name="header">#{msgs.headerLogin}</f:facet>#{user.login}</p:column>
+				<p:column><f:facet name="header">#{msgs.headerStatus}</f:facet>#{user.status}</p:column>
+			</p:dataTable>
 		</h:form>
 	</ui:define>
 
 	<ui:define name="pie">
-		<ui:include src="/snippets/pie-casa.xhtml"></ui:include>
 	</ui:define>
 
 </ui:composition>

@@ -9,9 +9,17 @@
       #{msgs.tituloHead}
     </ui:define>
 
+	<ui:define name="menubar">
+		<p:menubar id="menubar">
+			<p:menuitem value="#{msgs.listarUsuarios}" action="#{users.listado}" />
+			<ui:include src="/snippets/options.xhtml" />
+		</p:menubar>
+	</ui:define>
+
 	<ui:define name="cuerpo">
 		<h:form id="form-principal">
-			<p>Hola #{LOGGEDIN_USER.login} eres un ADMIN y llegaste hasta aquí!</p>
+			<p>Bienvenido a tu Gestor de Usuarios, #{LOGGEDIN_USER.login}!</p>
+			<p>Escoge una de las opciones en la barra de navegación para la gestión de usuarios.</p>
 		</h:form>
 	</ui:define>
 

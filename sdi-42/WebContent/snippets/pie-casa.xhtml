@@ -3,9 +3,14 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
+
 	<h:form id="form-pie">
-		<p:separator />
-		<p:commandLink value="#{msgs.enlaceCasa}" action="/index.xhtml">
-		</p:commandLink>
+		<div class="ui-grid ui-grid-responsive" id="pie"
+			style="width: 100%; position: fixed; bottom: 0; left: 0; text-align: center">
+			<p:separator />
+			<h:outputText style="color: #909090 ; background-color:transparent"
+				value="@GTD Task Manager SDI-2017" />
+		</div>
 	</h:form>
+	
 </ui:composition>

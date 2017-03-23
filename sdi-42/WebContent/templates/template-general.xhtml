@@ -25,16 +25,8 @@
 					</th>
 				</tr>
 			</table>
-			<p:menubar>
-				<p:menuitem value="#{msgs.registrarUsuario}" action="registrarUsuario"/>
-				<p:submenu style="float:right" label="#{msgs.textoIdioma}"
-					icon="ui-icon-document">
-					<p:menuitem value="#{msgs.enlaceIdiomaES}"
-						actionListener="#{settings.setSpanish}" update="@all" />
-					<p:menuitem value="#{msgs.enlaceIdiomaEN}"
-						actionListener="#{settings.setEnglish}" update="@all" />
-				</p:submenu>
-			</p:menubar>
+			
+			<ui:insert name="menubar">#{msgs.tituloDefectoMenuBar}</ui:insert>
 
 		</h:form>
 

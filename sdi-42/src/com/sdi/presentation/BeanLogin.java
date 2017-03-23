@@ -25,6 +25,17 @@ public class BeanLogin extends User implements Serializable {
 	private static final long serialVersionUID = 55556L;
 
 	private String resultado = "";
+	
+//	@ManagedProperty(value="#{users}")
+//	private BeanUsers beanUsers;
+//	
+//	public BeanUsers getBeanUsers(){
+//		return this.beanUsers;
+//	}
+//	
+//	public void setBeanUsers(BeanUsers beanUsers){
+//		this.beanUsers = beanUsers;
+//	}
 
 	private User user = new User();
 
@@ -41,16 +52,31 @@ public class BeanLogin extends User implements Serializable {
 		Log.info("BeanLogin - PostConstruct");
 		// TODO Hacer lo mismo pero con BeanTasks para el usuario normal y
 		// BeanUsers para el admin.
-		// beantrips = (BeanTrips)
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(new
-		// String("viajes"));
-		// //si no existe lo creamos e inicializamos
-		// if (beantrips == null) {
-		// Log.info("BeanTrips-No existia");
-		// beantrips = new BeanTrips();
-		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(
-		// "viajes", beantrips);
-		// }
+//		 beantrips = (BeanTrips)
+//		 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(new
+//		 String("viajes"));
+//		 //si no existe lo creamos e inicializamos
+//		 if (beantrips == null) {
+//		 Log.info("BeanTrips-No existia");
+//		 beantrips = new BeanTrips();
+//		 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(
+//		 "viajes", beantrips);
+//		 }
+		
+//		beanUsers = (BeanUsers) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("users");
+//		if(beanUsers == null){
+//			Log.info("BeanUsers - No existía.");
+//			beanUsers = new BeanUsers();
+//			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("users", beanUsers);
+//		}
+		
+		
+//		beanTasks = (BeanTasks) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("tasks");
+//		if(beanTasks == null){
+//			Log.info("BeanTasks - No existía.");
+//			beanTasks = new BeanTasks();
+//			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("tasks", beanTasks);
+//		}
 	}
 
 	@PreDestroy
@@ -101,10 +127,11 @@ public class BeanLogin extends User implements Serializable {
 				if (aux != null) {
 					user = aux;
 					putUserInSession();
-					if(user.getIsAdmin())
+					if(user.getIsAdmin()){
 						resultado = "admin";
-					else
+					}else{
 						resultado = "client";
+					}
 					Log.info("El usuario [%s] ha iniciado sesión",
 							user.getLogin());
 					// TODO Cargar las categorías y las tareas del usuario.
