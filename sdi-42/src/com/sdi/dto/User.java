@@ -46,9 +46,13 @@ public class User {
 		return login;
 	}
 
-	public User setLogin(String login) {
+//	public User setLogin(String login) {
+//		this.login = login;
+//		return this;
+//	}
+	
+	public void setLogin(String login) {
 		this.login = login;
-		return this;
 	}
 
 	public String getEmail() {
@@ -64,9 +68,13 @@ public class User {
 		return password;
 	}
 
-	public User setPassword(String password) {
+//	public User setPassword(String password) {
+//		this.password = password;
+//		return this;
+//	}
+	
+	public void setPassword(String password) {
 		this.password = password;
-		return this;
 	}
 
 	public Boolean getIsAdmin() {

@@ -9,7 +9,6 @@
 			<var>msgs</var>
 		</resource-bundle>
 	</application>
-
 	<managed-bean>
 		<managed-bean-name>controller</managed-bean-name>
 		<managed-bean-class>com.sdi.presentation.BeanUsers</managed-bean-class>
@@ -18,6 +17,11 @@
 	<managed-bean>
 		<managed-bean-name>settings</managed-bean-name>
 		<managed-bean-class>com.sdi.presentation.BeanSettings</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>login</managed-bean-name>
+		<managed-bean-class>com.sdi.presentation.BeanLogin</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<navigation-rule>
@@ -30,13 +34,14 @@
 	<navigation-rule>
 		<from-view-id>/index.xhtml</from-view-id>
 		<navigation-case>
-			<from-action>#{controller.listado}</from-action>
+			<from-action>#{login.verify}</from-action>
 			<from-outcome>exito</from-outcome>
-			<to-view-id>/listado.xhtml</to-view-id>
+			<to-view-id>/principalUser.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>alta</from-outcome>
-			<to-view-id>/altaForm.xhtml</to-view-id>
+			<from-action>#{login.verify}</from-action>
+			<from-outcome>fracaso</from-outcome>
+			<to-view-id>/index.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 </faces-config>

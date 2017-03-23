@@ -13,7 +13,7 @@ public class BeanUserFactory {
 				.getExternalContext().getSessionMap().get(new String("user"));
 		// si no existe lo creamos e inicializamos
 		if (user == null) {
-			System.out.println("BeanUsers - No existia");
+			System.out.println("BeanUser - No existia");
 			user = new BeanUser();
 			FacesContext.getCurrentInstance().getExternalContext()
 					.getSessionMap().put("user", user);
