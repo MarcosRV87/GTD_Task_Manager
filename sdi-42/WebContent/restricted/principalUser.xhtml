@@ -3,7 +3,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	template="/templates/template-general.xhtml">
+	template="/templates/template-general-restricted.xhtml">
 
 	<ui:define name="titulo">
       #{msgs.tituloHead}
@@ -11,7 +11,7 @@
 
 	<ui:define name="cuerpo">
 		<h:form id="form-principal">
-			<p>Hola, llegué hasta aquí!</p>
+			<p>Hola #{LOGGEDIN_USER.login} eres un CLIENTE y llegaste hasta aquí!</p>
 		</h:form>
 	</ui:define>
 

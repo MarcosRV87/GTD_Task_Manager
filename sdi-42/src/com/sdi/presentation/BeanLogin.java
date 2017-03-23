@@ -101,7 +101,10 @@ public class BeanLogin extends User implements Serializable {
 				if (aux != null) {
 					user = aux;
 					putUserInSession();
-					resultado = "exito";
+					if(user.getIsAdmin())
+						resultado = "admin";
+					else
+						resultado = "client";
 					Log.info("El usuario [%s] ha iniciado sesión",
 							user.getLogin());
 					// TODO Cargar las categorías y las tareas del usuario.
