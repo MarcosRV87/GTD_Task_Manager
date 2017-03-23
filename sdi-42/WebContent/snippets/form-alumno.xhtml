@@ -4,42 +4,20 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://java.sun.com/jsf/core">
 	<p:panelGrid id="Grid" columns="2" cellpadding="5">
-  #{msgs.nombre} 
+  #{msgs.login} 
   <h:panelGroup>
-			<p:inputText value="#{alumno.nombre}" required="true"
-				requiredMessage="#{msgs.formAlta_nombre_requiredMessage}"
-				validatorMessage="#{msgs.formAlta_nombre_validatorMessage}"
-				id="nombre">
+			<p:inputText value="#{user.login}" required="true"
+				requiredMessage="#{msgs.formAlta_login_requiredMessage}"
+				validatorMessage="#{msgs.formAlta_login_validatorMessage}"
+				id="login">
 				<f:validateLength maximum="20" />
 			</p:inputText>
-			<p:message for="nombre" />
+			<p:message for="login" />
 		</h:panelGroup>
   
-  #{msgs.apellidos} 
+  #{msgs.correo} 
   <h:panelGroup>
-			<p:inputText value="#{alumno.apellidos}" required="true"
-				requiredMessage="#{msgs.formAlta_apellidos_requiredMessage}"
-				validatorMessage="#{msgs.formAlta_apellidos_validatorMessage}"
-				id="apellidos">
-				<f:validateLength maximum="40" />
-			</p:inputText>
-			<p:message for="apellidos" />
-		</h:panelGroup>
-  
-  #{msgs.userid}
-  <h:panelGroup>
-			<p:inputText value="#{alumno.iduser}" required="true"
-				requiredMessage="#{msgs.formAlta_iduser_requiredMessage}"
-				validatorMessage="#{msgs.formAlta_iduser_validatorMessage}"
-				id="iduser">
-				<f:validateLength minimum="5" maximum="8" />
-			</p:inputText>
-			<p:message for="iduser" />
-		</h:panelGroup>  
-  
-  #{msgs.correo}
-  <h:panelGroup>
-			<p:inputText value="#{alumno.email}" required="true"
+			<p:inputText value="#{user.email}" required="true"
 				requiredMessage="#{msgs.formAlta_correo_requiredMessage}"
 				validatorMessage="#{msgs.formAlta_correo_validatorMessage}"
 				id="correo">
@@ -47,8 +25,30 @@
 			</p:inputText>
 			<p:message for="correo" />
 		</h:panelGroup>
+  
+  #{msgs.password}
+  <h:panelGroup>
+			<p:password value="#{user.password}" required="true"
+				requiredMessage="#{msgs.formAlta_password_requiredMessage}"
+				validatorMessage="#{msgs.formAlta_password_validatorMessage}"
+				id="password">
+				<f:validateLength minimum="8"/>
+			</p:password>
+			<p:message for="password" />
+		</h:panelGroup>  
+  
+  #{msgs.repassword}
+  <h:panelGroup>
+			<p:password required="true"
+				requiredMessage="#{msgs.formAlta_repassword_requiredMessage}"
+				validatorMessage="#{msgs.formAlta_repassword_validatorMessage}"
+				id="repassword">
+				<f:validateLength minimum="8"/>
+			</p:password>
+			<p:message for="repassword" />
+		</h:panelGroup>
 		<h:commandButton value="#{msgs.botonSalvar}"
-			action="#{controller.salva}" update="Grid" process="@form">
+			action="#{users.salva}" update="Grid" process="@form">
 		</h:commandButton>
 	</p:panelGrid>
 </ui:composition>

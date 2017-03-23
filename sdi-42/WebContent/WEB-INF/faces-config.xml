@@ -55,6 +55,11 @@
 			<from-outcome>fracaso</from-outcome>
 			<to-view-id>/index.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-action>#{login.register}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/altaForm.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>/restricted/principalAdmin.xhtml</from-view-id>
@@ -62,6 +67,19 @@
 			<from-action>#{users.listado}</from-action>
 			<from-outcome>exito</from-outcome>
 			<to-view-id>/restricted/listUsers.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/altaForm.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{users.salva}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/index.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{users.salva}</from-action>
+			<from-outcome>fracaso</from-outcome>
+			<to-view-id>/altaForm.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 </faces-config>

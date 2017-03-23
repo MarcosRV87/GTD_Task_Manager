@@ -159,5 +159,26 @@ public class BeanLogin extends User implements Serializable {
 
 		return resultado;
 	}
+	
+	public String register() {
+		FacesContext fc = FacesContext.getCurrentInstance();
+		// Si no existe un usuario en sesión
+		if (fc.getExternalContext().getSessionMap().get("LOGGEDIN_USER") == null) {
+			Log.info("Accediendo al registro de usuario");
+			resultado = "exito";
+			// TODO Cargar las categorías y las tareas del usuario.
+		} else {
+			resultado = "fracaso";
+			Log.info("Ya existe un usuario en sesión");
+			fc.addMessage(
+					null,
+					new FacesMessage(
+							FacesMessage.SEVERITY_ERROR,
+							"Usuario en sesión",
+							"Hay un usuario logeado, para logearte con otra cuenta debes cerrar la sesión con tu cuenta actual."));
+		}
+
+		return resultado;
+	}
 
 }

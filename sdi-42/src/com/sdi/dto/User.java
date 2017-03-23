@@ -59,9 +59,13 @@ public class User {
 		return email;
 	}
 
-	public User setEmail(String email) {
+//	public User setEmail(String email) {
+//		this.email = email;
+//		return this;
+//	}
+	
+	public void setEmail(String email){
 		this.email = email;
-		return this;
 	}
 
 	public String getPassword() {

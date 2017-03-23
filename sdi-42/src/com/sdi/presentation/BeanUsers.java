@@ -137,7 +137,10 @@ public class BeanUsers implements Serializable {
 			// Salvamos o actualizamos el user segun sea una operacion de alta
 			// o de edici��n
 			if (user.getId() == null) {
-				service.registerUser(user);
+				if(!user.getLogin().equals(service.findUserByName(user.getLogin())))
+					service.registerUser(user);
+				else
+					return "fallo";
 			} else {
 				service.updateUserDetails(user);
 			}
