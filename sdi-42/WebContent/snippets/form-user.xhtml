@@ -32,7 +32,7 @@
 				requiredMessage="#{msgs.formAlta_password_requiredMessage}"
 				validatorMessage="#{msgs.formAlta_password_validatorMessage}"
 				id="password">
-				<f:validateLength minimum="8"/>
+				<f:validateRegex pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"/>
 			</p:password>
 			<p:message for="password" />
 		</h:panelGroup>  
@@ -43,7 +43,7 @@
 				requiredMessage="#{msgs.formAlta_repassword_requiredMessage}"
 				validatorMessage="#{msgs.formAlta_repassword_validatorMessage}"
 				id="repassword">
-				<f:validateLength minimum="8"/>
+				<f:validateRegex pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"/>
 			</p:password>
 			<p:message for="repassword" />
 		</h:panelGroup>

@@ -49,13 +49,13 @@ public class DuplicateCategoryCommand implements Command<Long> {
 	}
 
 	private void duplicateTasks(Long catId, Long copyId) {
-		TaskDao tDao = Factories.persistence.getTaskDao();
-
-		List<Task> tasks = tDao.findTasksByCategoryId( catId );
-		for(Task t: tasks) {
-			Task copy = Cloner.clone(t).setCategoryId( copyId );
-			tDao.save( copy );
-		}
+//		TaskDao tDao = Factories.persistence.getTaskDao();
+//
+//		List<Task> tasks = tDao.findTasksByCategoryId( catId );
+//		for(Task t: tasks) {
+//			//Task copy = Cloner.clone(t).setCategoryId( copyId );
+//			tDao.save( copy );
+//		}
 	}
 
 }

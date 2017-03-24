@@ -1,20 +1,25 @@
 package com.sdi.presentation;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import alb.util.log.Log;
 
+import com.sdi.business.TaskService;
 import com.sdi.business.UserService;
 import com.sdi.business.exception.BusinessException;
+import com.sdi.dto.Task;
 import com.sdi.dto.User;
 import com.sdi.infrastructure.Factories;
 
@@ -36,6 +41,17 @@ public class BeanLogin extends User implements Serializable {
 //	public void setBeanUsers(BeanUsers beanUsers){
 //		this.beanUsers = beanUsers;
 //	}
+	
+	@ManagedProperty(value="#{tasks}")
+	private BeanTasks beanTasks;
+	
+	public BeanTasks getBeanTasks(){
+		return this.beanTasks;
+	}
+	
+	public void setBeanTasks(BeanTasks beanTasks){
+		this.beanTasks = beanTasks;
+	}
 
 	private User user = new User();
 
@@ -50,18 +66,6 @@ public class BeanLogin extends User implements Serializable {
 	@PostConstruct
 	public void init() {
 		Log.info("BeanLogin - PostConstruct");
-		// TODO Hacer lo mismo pero con BeanTasks para el usuario normal y
-		// BeanUsers para el admin.
-//		 beantrips = (BeanTrips)
-//		 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(new
-//		 String("viajes"));
-//		 //si no existe lo creamos e inicializamos
-//		 if (beantrips == null) {
-//		 Log.info("BeanTrips-No existia");
-//		 beantrips = new BeanTrips();
-//		 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(
-//		 "viajes", beantrips);
-//		 }
 		
 //		beanUsers = (BeanUsers) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("users");
 //		if(beanUsers == null){
@@ -71,12 +75,12 @@ public class BeanLogin extends User implements Serializable {
 //		}
 		
 		
-//		beanTasks = (BeanTasks) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("tasks");
-//		if(beanTasks == null){
-//			Log.info("BeanTasks - No existía.");
-//			beanTasks = new BeanTasks();
-//			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("tasks", beanTasks);
-//		}
+		beanTasks = (BeanTasks) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("tasks");
+		if(beanTasks == null){
+			Log.info("BeanTasks - No existía.");
+			beanTasks = new BeanTasks();
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("tasks", beanTasks);
+		}
 	}
 
 	@PreDestroy
@@ -121,6 +125,7 @@ public class BeanLogin extends User implements Serializable {
 		// Si no existe un usuario en sesión
 		if (fc.getExternalContext().getSessionMap().get("LOGGEDIN_USER") == null) {
 			UserService us = Factories.services.getUserService();
+			TaskService ts = Factories.services.getTaskService();
 			try {
 				User aux = us.findLoggableUser(user.getLogin(),
 						user.getPassword());
@@ -130,6 +135,9 @@ public class BeanLogin extends User implements Serializable {
 					if(user.getIsAdmin()){
 						resultado = "admin";
 					}else{
+						List<Task> auxTasks = new ArrayList<Task>();
+						auxTasks = ts.findInboxTasksByUserId(user.getId());
+						beanTasks.setTasks(auxTasks);
 						resultado = "client";
 					}
 					Log.info("El usuario [%s] ha iniciado sesión",

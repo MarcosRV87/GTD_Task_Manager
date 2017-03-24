@@ -208,4 +208,66 @@ public class BeanTasks implements Serializable {
 	public void end() {
 		System.out.println("BeanTasks - PreDestroy");
 	}
+	
+	public String listInbox(){
+		TaskService service;
+		Map<String, Object> sessionmap = FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap();
+		try {
+			// Acceso a la implementacion de la capa de negocio
+			// a trav��s de la factor��a
+			User user = (User) sessionmap.get("LOGGEDIN_USER");
+			service = Factories.services.getTaskService();
+			// Actualizamos el javabean de tasks inyectado en la tabla
+			//Mismo que antes, hay que obtener el user de la task
+			tasks = service.findInboxTasksByUserId(user.getId());
+			return "exito"; 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error"; // Nos vamos a la vista de error.
+		}
+	}
+	
+	public String listToday(){
+		TaskService service;
+		Map<String, Object> sessionmap = FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap();
+		try {
+			// Acceso a la implementacion de la capa de negocio
+			// a trav��s de la factor��a
+			User user = (User) sessionmap.get("LOGGEDIN_USER");
+			service = Factories.services.getTaskService();
+			// Actualizamos el javabean de tasks inyectado en la tabla
+			//Mismo que antes, hay que obtener el user de la task
+			tasks = service.findTodayTasksByUserId(user.getId());
+			
+			return "exito"; 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error"; // Nos vamos a la vista de error.
+		}
+	}
+	
+	public String listWeek(){
+		TaskService service;
+		Map<String, Object> sessionmap = FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap();
+		try {
+			// Acceso a la implementacion de la capa de negocio
+			// a trav��s de la factor��a
+			User user = (User) sessionmap.get("LOGGEDIN_USER");
+			service = Factories.services.getTaskService();
+			// Actualizamos el javabean de tasks inyectado en la tabla
+			//Mismo que antes, hay que obtener el user de la task
+			tasks = service.findWeekTasksByUserId(user.getId());
+			
+			return "exito"; 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error"; // Nos vamos a la vista de error.
+		}
+	}
 }

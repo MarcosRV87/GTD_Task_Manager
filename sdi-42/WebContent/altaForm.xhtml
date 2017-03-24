@@ -7,6 +7,7 @@
 
 	<ui:define name="menubar">
 		<p:menubar id="menubar">
+			<p:menuitem value="#{msgs.enlaceAtras}" action="/index.xhtml"/>
 			<p:submenu style="float:right" label="#{msgs.textoIdioma}"
 				icon="ui-icon-document">
 				<p:menuitem value="#{msgs.enlaceIdiomaES}"
@@ -23,7 +24,7 @@
 	<ui:define name="cuerpo">
 		<h:form id="form-principal">
 			<p:panel header="#{msgs.tituloOperacionAlta}">
-				<ui:include src="/snippets/form-alumno.xhtml" />
+				<ui:include src="/snippets/form-user.xhtml" />
 			</p:panel>
 		</h:form>
 

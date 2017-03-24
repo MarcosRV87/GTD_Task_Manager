@@ -46,19 +46,9 @@ public class BeanUsers implements Serializable {
 
 	private List<User> users = null;
 
-/*	SUPRIMIDO EJERCICIO 21-c
- * public BeanUsers() {
-		iniciaUser(null);
-	}*/
-
 	public List<User> getUsers() {
 		return (users);
 	}
-
-	/*
-	 * public void setUser(User user) { this.user = user; } public
-	 * User getUser() { return user; }
-	 */
 
 	public void setUsers(List<User> users) {
 		this.users = users;
