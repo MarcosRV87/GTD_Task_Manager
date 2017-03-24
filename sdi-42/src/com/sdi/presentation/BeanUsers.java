@@ -12,6 +12,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
+import alb.util.log.Log;
+
 import com.sdi.business.UserService;
 import com.sdi.dto.User;
 import com.sdi.infrastructure.Factories;
@@ -153,6 +155,28 @@ public class BeanUsers implements Serializable {
 			return "error"; // Nos vamos a la vista de error.
 		}
 
+	}
+	
+	public String addTarea(){
+		String resultado = "";
+		FacesContext fc = FacesContext.getCurrentInstance();
+		// Si no existe un usuario en sesión
+		if (fc.getExternalContext().getSessionMap().get("LOGGEDIN_USER") != null) {
+			Log.info("Accediendo a añadir una tarea");
+			resultado = "exito";
+		}
+		return resultado;
+	}
+	
+	public String atras(){
+		String resultado = "";
+		FacesContext fc = FacesContext.getCurrentInstance();
+		// Si no existe un usuario en sesión
+		if (fc.getExternalContext().getSessionMap().get("LOGGEDIN_USER") != null) {
+			Log.info("Volviendo a la vista principal de usuario");
+			resultado = "exito";
+		}
+		return resultado;
 	}
 
 	// Se inicia correctamente el MBean inyectado si JSF lo hubiera crea

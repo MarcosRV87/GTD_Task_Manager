@@ -6,49 +6,36 @@
 	<p:panelGrid id="Grid" columns="2" cellpadding="5">
   #{msgs.titulo} 
   <h:panelGroup>
-			<p:inputText value="#{user.login}" required="true"
+			<p:inputText value="#{task.title}" required="true"
 				requiredMessage="#{msgs.formAlta_login_requiredMessage}"
-				validatorMessage="#{msgs.formAlta_login_validatorMessage}"
-				id="login">
-				<f:validateLength maximum="20" />
+				id="title">
 			</p:inputText>
-			<p:message for="login" />
+			<p:message for="title" />
 		</h:panelGroup>
   
   #{msgs.comentarios} 
   <h:panelGroup>
-			<p:inputText value="#{user.email}" required="true"
-				requiredMessage="#{msgs.formAlta_correo_requiredMessage}"
-				validatorMessage="#{msgs.formAlta_correo_validatorMessage}"
-				id="correo">
-				<f:validateRegex pattern=".+@.+\.[a-z]+" />
+			<p:inputText value="#{task.comments}"
+				id="comments">
 			</p:inputText>
-			<p:message for="correo" />
+			<p:message for="comments" />
 		</h:panelGroup>
   
   #{msgs.planificada}
   <h:panelGroup>
-			<p:password value="#{user.password}" required="true"
-				requiredMessage="#{msgs.formAlta_password_requiredMessage}"
-				validatorMessage="#{msgs.formAlta_password_validatorMessage}"
-				id="password">
-				<f:validateLength minimum="8"/>
-			</p:password>
-			<p:message for="password" />
+			<p:outputLabel for="planificada" />
+        <p:calendar id="planificada" value="#{calendarView.date2}" />
 		</h:panelGroup>  
   
   #{msgs.categoria}
   <h:panelGroup>
-			<p:password required="true"
-				requiredMessage="#{msgs.formAlta_repassword_requiredMessage}"
-				validatorMessage="#{msgs.formAlta_repassword_validatorMessage}"
-				id="repassword">
-				<f:validateLength minimum="8"/>
-			</p:password>
-			<p:message for="repassword" />
+			<p:inputText
+				id="category">
+			</p:inputText>
+			<p:message for="category" />
 		</h:panelGroup>
 		<h:commandButton value="#{msgs.botonSalvar}"
-			action="#{users.salva}" update="Grid" process="@form">
+			action="#{tasks.salva}" update="Grid" process="@form">
 		</h:commandButton>
 	</p:panelGrid>
 </ui:composition>

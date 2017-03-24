@@ -71,7 +71,7 @@ public class BeanTasks implements Serializable {
 				.getResourceBundle(facesContext, "msgs");
 		task.setId(null);
 		task.setTitle(bundle.getString("valorDefectoTitle"));
-		task.setComments(bundle.getString("valorDefectoComments"));
+//		task.setComments(bundle.getString("valorDefectoComments"));
 		task.setCreated(DateUtil.today());
 //		task.setPlanned(bundle.getString("valorDefectoPlanned"));
 //		task.setFinished(bundle.getString("valorDefectoFinished"));

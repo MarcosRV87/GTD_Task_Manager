@@ -16,7 +16,7 @@
 				<p:menuitem value="#{msgs.verTareas}"
 					actionListener="#{settings.setSpanish}" update="@all" />
 				<p:menuitem value="#{msgs.añadirTarea}"
-					actionListener="#{settings.setEnglish}" update="@all" />
+					action="#{users.addTarea}" update="@all" />
 			</p:submenu>
 			<ui:include src="/snippets/options.xhtml" />
 		</p:menubar>

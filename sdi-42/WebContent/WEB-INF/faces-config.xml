@@ -15,6 +15,11 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
+		<managed-bean-name>tasks</managed-bean-name>
+		<managed-bean-class>com.sdi.presentation.BeanTasks</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
 		<managed-bean-name>settings</managed-bean-name>
 		<managed-bean-class>com.sdi.presentation.BeanSettings</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -67,6 +72,22 @@
 			<from-action>#{users.listado}</from-action>
 			<from-outcome>exito</from-outcome>
 			<to-view-id>/restricted/listUsers.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/restricted/principalUser.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{users.addTarea}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/addTareaForm.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/addTareaForm.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{users.atras}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/restricted/principalUser.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
