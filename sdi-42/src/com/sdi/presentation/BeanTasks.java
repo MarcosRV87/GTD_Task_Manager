@@ -12,74 +12,79 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import com.sdi.business.UserService;
-import com.sdi.dto.User;
+import alb.util.date.DateUtil;
+
+import com.sdi.business.TaskService;
+import com.sdi.dto.Task;
 import com.sdi.infrastructure.Factories;
 import com.sdi.presentation.impl.BeanFactoryImp;
 
-@ManagedBean(name = "users")
+@ManagedBean(name = "tasks")
 @SessionScoped
-public class BeanUsers implements Serializable {
+public class BeanTasks implements Serializable {
 	private static final long serialVersionUID = 55555L;
-	// Se añade este atributo de entidad para recibir el user concreto
+	// Se añade este atributo de entidad para recibir el task concreto
 	// selecionado de la tabla o de un formulario
 	// Es necesario inicializarlo para que al entrar desde el formulario de
 	// AltaForm.xml se puedan
 	// dejar los avalores en un objeto existente.
-	// private User user = new User();
+	// private Task task = new Task();
 
 	// uso de inyección de dependencia
-	@ManagedProperty(value = "#{user}")
-	private BeanUser user;
+	@ManagedProperty(value = "#{task}")
+	private BeanTask task;
 
-	public BeanUser getUser() {
-		return user;
+	public BeanTask getTask() {
+		return task;
 	}
 
-	public void setUser(BeanUser user) {
-		this.user = user;
+	public void setTask(BeanTask task) {
+		this.task = task;
 	}
 
-	private List<User> users = null;
+	private List<Task> tasks = null;
 
 /*	SUPRIMIDO EJERCICIO 21-c
- * public BeanUsers() {
-		iniciaUser(null);
+ * public BeanTasks() {
+		iniciaTask(null);
 	}*/
 
-	public List<User> getUsers() {
-		return (users);
+	public List<Task> getTasks() {
+		return (tasks);
 	}
 
 	/*
-	 * public void setUser(User user) { this.user = user; } public
-	 * User getUser() { return user; }
+	 * public void setTask(Task task) { this.task = task; } public
+	 * Task getTask() { return task; }
 	 */
 
-	public void setUsers(List<User> users) {
-		this.users = users;
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
 	}
 
-	public void iniciaUser(ActionEvent event) {
+	public void iniciaTask(ActionEvent event) {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		// Obtenemos el archivo de propiedades correspondiente al idioma que
 		// tengamos seleccionado y que viene envuelto en facesContext
 		ResourceBundle bundle = facesContext.getApplication()
 				.getResourceBundle(facesContext, "msgs");
-		user.setId(null);
-		user.setEmail(bundle.getString("valorDefectoCorreo"));
-//		user.setIsAdmin(bundle.getString("valorDefectoUserAdmin"));
-		user.setLogin(bundle.getString("valorDefectoLogin"));
-		user.setPassword(bundle.getString("valorDefectoPassword"));
-//		user.setStatus(bundle.getString("valorDefectoStatus"));
+		task.setId(null);
+		task.setTitle(bundle.getString("valorDefectoTitle"));
+		task.setComments(bundle.getString("valorDefectoComments"));
+		task.setCreated(DateUtil.today());
+//		task.setPlanned(bundle.getString("valorDefectoPlanned"));
+//		task.setFinished(bundle.getString("valorDefectoFinished"));
+//		task.setCategoryId();
+//		task.setUserId();
 	}
 
 	public String listado() {
-		UserService service;
+		TaskService service;
 		try {
-			service = Factories.services.getUserService();
-			users = service.findAll();
-
+			service = Factories.services.getTaskService();
+			//Hay que obtener el id del usuario que está en sesión
+//			tasks = service.findInboxTasksByUserId();
+					
 			return "exito"; // Nos vamos a la vista listado.xhtml
 
 		} catch (Exception e) {
@@ -89,16 +94,16 @@ public class BeanUsers implements Serializable {
 
 	}
 
-//	public String baja(User user) {
-//		UserService service;
+//	public String baja(Task task) {
+//		TaskService service;
 //		try {
 //			// Acceso a la implementacion de la capa de negocio
 //			// a trav��s de la factor��a
 //			service = 
-//			// Aliminamos el user seleccionado en la tabla
-//			service.deleteUser(user.getId());
-//			// Actualizamos el javabean de users inyectado en la tabla.
-//			users = (User[]) service.findAll().toArray(new User[0]);
+//			// Aliminamos el task seleccionado en la tabla
+//			service.deleteTask(task.getId());
+//			// Actualizamos el javabean de tasks inyectado en la tabla.
+//			tasks = (Task[]) service.findAll().toArray(new Task[0]);
 //			return "exito"; // Nos vamos a la vista de listado.
 //
 //		} catch (Exception e) {
@@ -109,16 +114,16 @@ public class BeanUsers implements Serializable {
 //	}
 
 	public String edit() {
-		UserService service;
+		TaskService service;
 		try {
 			// Acceso a la implementacion de la capa de negocio
 			// a trav��s de la factor��a
-			service = Factories.services.getUserService();
-			// Recargamos el user seleccionado en la tabla de la base de datos
+			service = Factories.services.getTaskService();
+			// Recargamos el task seleccionado en la tabla de la base de datos
 			// por si hubiera cambios.
 
 			// TODO PREGUNTAR SI ESTO ESTÁ CORRECTO
-			user = (BeanUser) service.findUserById(user.getId());
+			task = (BeanTask) service.findTaskById(task.getId());
 			return "exito"; // Nos vamos a la vista de Edición.
 
 		} catch (Exception e) {
@@ -129,23 +134,21 @@ public class BeanUsers implements Serializable {
 	}
 
 	public String salva() {
-		UserService service;
+		TaskService service;
 		try {
 			// Acceso a la implementacion de la capa de negocio
 			// a trav��s de la factor��a
-			service = Factories.services.getUserService();
-			// Salvamos o actualizamos el user segun sea una operacion de alta
+			service = Factories.services.getTaskService();
+			// Salvamos o actualizamos el task segun sea una operacion de alta
 			// o de edici��n
-			if (user.getId() == null) {
-				if(user.getLogin().equals(service.findUserByName(user.getLogin()))==false)
-					service.registerUser(user);
-				else
-					return "fallo";
+			if (task.getId() == null) {
+				service.createTask(task);
 			} else {
-				service.updateUserDetails(user);
+				service.updateTask(task);
 			}
-			// Actualizamos el javabean de users inyectado en la tabla
-			users = service.findAll();
+			// Actualizamos el javabean de tasks inyectado en la tabla
+			//Mismo que antes, hay que obtener el user de la task
+//			tasks = service.findInboxTasksByUserId(id);
 			return "exito"; // Nos vamos a la vista de listado.
 
 		} catch (Exception e) {
@@ -163,15 +166,15 @@ public class BeanUsers implements Serializable {
 	// ya estaba construido y en @PostConstruct SI.
 	@PostConstruct
 	public void init() {
-		System.out.println("BeanUsers - PostConstruct");
-		// Buscamos el user en la sesión. Esto es un patrón factoría
+		System.out.println("BeanTasks - PostConstruct");
+		// Buscamos el task en la sesión. Esto es un patrón factoría
 		// claramente.
 		BeanFactory bFactory = new BeanFactoryImp();
-		user = bFactory.createBeanUser();
+		task = bFactory.createBeanTask();
 	}
 
 	@PreDestroy
 	public void end() {
-		System.out.println("BeanUsers - PreDestroy");
+		System.out.println("BeanTasks - PreDestroy");
 	}
 }
