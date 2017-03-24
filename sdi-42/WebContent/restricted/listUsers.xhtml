@@ -17,17 +17,33 @@
 
 	<ui:define name="cuerpo">
 		<h:form id="form-principal">
-		<br/>
-		<br/>
+			<br />
+			<br />
 			<p:dataTable id="usersTable" var="user" value="#{users.users}"
 				rows="5">
 				<f:facet name="header">
 					<h:outputText value="#{msgs.labelListadoUsuarios}" />
 				</f:facet>
-				<p:column><f:facet name="header">#{msgs.headerUserId}</f:facet>#{user.id}</p:column>
-				<p:column><f:facet name="header">#{msgs.headerEmail}</f:facet>#{user.email}</p:column>
-				<p:column><f:facet name="header">#{msgs.headerLogin}</f:facet>#{user.login}</p:column>
-				<p:column><f:facet name="header">#{msgs.headerStatus}</f:facet>#{user.status}</p:column>
+				<p:column>
+					<f:facet name="header">#{msgs.headerUserId}</f:facet>#{user.id}</p:column>
+				<p:column>
+					<f:facet name="header">#{msgs.headerEmail}</f:facet>#{user.email}</p:column>
+				<p:column>
+					<f:facet name="header">#{msgs.headerLogin}</f:facet>#{user.login}</p:column>
+				<p:column>
+					<f:facet name="header">#{msgs.headerStatus}</f:facet>#{user.status}</p:column>
+				<p:column>
+					<f:facet name="header">#{msgs.headerModificarStatus}</f:facet>
+					<p:commandLink value="#{msgs.deshabilitar}" action="#{users.switchStatus(user)}" type="submit"
+						rendered="#{user.status eq 'ENABLED'}" update="form-principal"></p:commandLink>
+					<p:commandLink value="#{msgs.habilitar}" action="#{users.switchStatus(user)}" type="submit"
+						rendered="#{user.status eq 'DISABLED'}" update="form-principal"></p:commandLink>
+				</p:column>
+				<p:column>
+					<f:facet name="header">#{msgs.headerEliminar}</f:facet>
+					<p:commandLink value="#{msgs.headerEliminar}" action="#{users.delete(user)}" type="submit"
+						update="form-principal"></p:commandLink>
+				</p:column>
 			</p:dataTable>
 		</h:form>
 	</ui:define>

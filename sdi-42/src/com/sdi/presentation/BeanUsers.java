@@ -14,8 +14,10 @@ import javax.faces.event.ActionEvent;
 
 import alb.util.log.Log;
 
+import com.sdi.business.AdminService;
 import com.sdi.business.UserService;
 import com.sdi.dto.User;
+import com.sdi.dto.types.UserStatus;
 import com.sdi.infrastructure.Factories;
 import com.sdi.presentation.impl.BeanFactoryImp;
 
@@ -155,6 +157,51 @@ public class BeanUsers implements Serializable {
 			return "error"; // Nos vamos a la vista de error.
 		}
 
+	}
+	
+	public String switchStatus(User user) {
+		UserService us;
+		AdminService as;
+		try {
+			// Acceso a la implementacion de la capa de negocio
+			// a trav��s de la factor��a
+			us = Factories.services.getUserService();
+			as = Factories.services.getAdminService();
+			// Aliminamos el user seleccionado en la tabla
+			if (user.getStatus() == UserStatus.DISABLED) {
+				as.enableUser(user.getId());
+			} else {
+				as.disableUser(user.getId());
+			}
+			// Actualizamos el javabean de users inyectado en la tabla.
+			users = us.findAll();
+			return "exito"; // Nos vamos a la vista de listado.
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error"; // Nos vamos a la vista de error
+		}
+
+	}
+
+	public String delete(User user) {
+		UserService us;
+		AdminService as;
+		try {
+			// Acceso a la implementacion de la capa de negocio
+			// a trav��s de la factor��a
+			us = Factories.services.getUserService();
+			as = Factories.services.getAdminService();
+			// Aliminamos el user seleccionado en la tabla
+			as.deepDeleteUser(user.getId());
+			// Actualizamos el javabean de users inyectado en la tabla.
+			users = us.findAll();
+			return "exito"; // Nos vamos a la vista de listado.
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error"; // Nos vamos a la vista de error
+		}
 	}
 	
 	public String addTarea(){
