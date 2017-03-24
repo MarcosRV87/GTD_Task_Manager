@@ -2,6 +2,7 @@ package com.sdi.presentation;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
@@ -80,10 +81,13 @@ public class BeanTasks implements Serializable {
 
 	public String listado() {
 		TaskService service;
+		Map<String, Object> sessionmap = FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap();
 		try {
+			BeanUser user = (BeanUser) sessionmap.get("LOGGEDIN_USER");
 			service = Factories.services.getTaskService();
 			//Hay que obtener el id del usuario que está en sesión
-//			tasks = service.findInboxTasksByUserId();
+			tasks = service.findInboxTasksByUserId(user.getId());
 					
 			return "exito"; // Nos vamos a la vista listado.xhtml
 
@@ -135,9 +139,12 @@ public class BeanTasks implements Serializable {
 
 	public String salva() {
 		TaskService service;
+		Map<String, Object> sessionmap = FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap();
 		try {
 			// Acceso a la implementacion de la capa de negocio
 			// a trav��s de la factor��a
+			BeanUser user = (BeanUser) sessionmap.get("LOGEDIN_USER");
 			service = Factories.services.getTaskService();
 			// Salvamos o actualizamos el task segun sea una operacion de alta
 			// o de edici��n
@@ -148,7 +155,7 @@ public class BeanTasks implements Serializable {
 			}
 			// Actualizamos el javabean de tasks inyectado en la tabla
 			//Mismo que antes, hay que obtener el user de la task
-//			tasks = service.findInboxTasksByUserId(id);
+			tasks = service.findInboxTasksByUserId(user.getId());
 			return "exito"; // Nos vamos a la vista de listado.
 
 		} catch (Exception e) {
