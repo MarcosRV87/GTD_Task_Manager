@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.sdi.dto.Task;
+import com.sdi.dto.User;
+import com.sdi.dto.types.UserStatus;
 import com.sdi.persistence.TaskDao;
 import com.sdi.persistence.util.JdbcTemplate;
 import com.sdi.persistence.util.RowMapper;
@@ -14,17 +16,30 @@ public class TaskDaoJdbcImpl implements TaskDao {
 	
 	public class TaskDtoMapper implements RowMapper<Task> {
 
+//		@Override
+//		public Task toObject(ResultSet rs) throws SQLException {
+//			return new Task()
+//				.setId( rs.getLong("id") )
+//				.setTitle( rs.getString("title") )
+//				.setComments( rs.getString("comments"))
+//				.setCreated( toDate( rs.getDate( "created") ))
+//				.setPlanned( toDate( rs.getDate( "planned") ))
+//				.setFinished( toDate( rs.getDate( "finished") ))
+//				.setCategoryId( (Long)rs.getObject("category_id") ) // may be null
+//				.setUserId( rs.getLong("user_id") );
+//		}
 		@Override
 		public Task toObject(ResultSet rs) throws SQLException {
-			return new Task()
-				.setId( rs.getLong("id") )
-				.setTitle( rs.getString("title") )
-				.setComments( rs.getString("comments"))
-				.setCreated( toDate( rs.getDate( "created") ))
-				.setPlanned( toDate( rs.getDate( "planned") ))
-				.setFinished( toDate( rs.getDate( "finished") ))
-				.setCategoryId( (Long)rs.getObject("category_id") ) // may be null
-				.setUserId( rs.getLong("user_id") );
+			Task task = new Task();
+			task.setId( rs.getLong("id") );
+			task.setTitle( rs.getString("title") );
+			task.setComments( rs.getString("comments") );
+			task.setCreated( rs.getDate("created") );
+			task.setPlanned( rs.getDate("planned") );
+			task.setFinished( rs.getDate("finished"));
+			task.setCategoryId( rs.getLong("category_id"));
+			task.setUserId( rs.getLong("user_id"));
+			return task;
 		}
 
 
