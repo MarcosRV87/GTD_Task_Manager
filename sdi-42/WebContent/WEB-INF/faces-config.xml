@@ -77,7 +77,7 @@
 	<navigation-rule>
 		<from-view-id>/restricted/principalUser.xhtml</from-view-id>
 		<navigation-case>
-			<from-action>#{users.addTarea}</from-action>
+			<from-action>#{tasks.addTarea}</from-action>
 			<from-outcome>exito</from-outcome>
 			<to-view-id>/addTareaForm.xhtml</to-view-id>
 		</navigation-case>
@@ -85,9 +85,19 @@
 	<navigation-rule>
 		<from-view-id>/addTareaForm.xhtml</from-view-id>
 		<navigation-case>
-			<from-action>#{users.atras}</from-action>
+			<from-action>#{tasks.atras}</from-action>
 			<from-outcome>exito</from-outcome>
 			<to-view-id>/restricted/principalUser.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.salva}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/restricted/principalUser.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.atras}</from-action>
+			<from-outcome>fracaso</from-outcome>
+			<to-view-id>/addTareaForm.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>

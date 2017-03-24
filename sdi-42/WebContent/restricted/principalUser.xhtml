@@ -11,13 +11,8 @@
 
 	<ui:define name="menubar">
 		<p:menubar id="menubar">
-			<p:submenu label="#{msgs.textoOpciones}"
-				icon="ui-icon-document">
-				<p:menuitem value="#{msgs.verTareas}"
-					actionListener="#{settings.setSpanish}" update="@all" />
-				<p:menuitem value="#{msgs.añadirTarea}"
-					action="#{users.addTarea}" update="@all" />
-			</p:submenu>
+			<p:menuitem value="#{msgs.añadirTarea}"
+				action="#{tasks.addTarea}" update="@all" />
 			<ui:include src="/snippets/options.xhtml" />
 		</p:menubar>
 	</ui:define>

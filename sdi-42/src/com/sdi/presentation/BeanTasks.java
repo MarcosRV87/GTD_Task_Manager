@@ -14,9 +14,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import alb.util.date.DateUtil;
+import alb.util.log.Log;
 
 import com.sdi.business.TaskService;
 import com.sdi.dto.Task;
+import com.sdi.dto.User;
 import com.sdi.infrastructure.Factories;
 import com.sdi.presentation.impl.BeanFactoryImp;
 
@@ -84,7 +86,7 @@ public class BeanTasks implements Serializable {
 		Map<String, Object> sessionmap = FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap();
 		try {
-			BeanUser user = (BeanUser) sessionmap.get("LOGGEDIN_USER");
+			User user = (User) sessionmap.get("LOGGEDIN_USER");
 			service = Factories.services.getTaskService();
 			//Hay que obtener el id del usuario que está en sesión
 			tasks = service.findInboxTasksByUserId(user.getId());
@@ -144,7 +146,7 @@ public class BeanTasks implements Serializable {
 		try {
 			// Acceso a la implementacion de la capa de negocio
 			// a trav��s de la factor��a
-			BeanUser user = (BeanUser) sessionmap.get("LOGEDIN_USER");
+			User user = (User) sessionmap.get("LOGGEDIN_USER");
 			service = Factories.services.getTaskService();
 			// Salvamos o actualizamos el task segun sea una operacion de alta
 			// o de edici��n
@@ -163,6 +165,28 @@ public class BeanTasks implements Serializable {
 			return "error"; // Nos vamos a la vista de error.
 		}
 
+	}
+	
+	public String addTarea(){
+		String resultado = "";
+		FacesContext fc = FacesContext.getCurrentInstance();
+		// Si no existe un usuario en sesión
+		if (fc.getExternalContext().getSessionMap().get("LOGGEDIN_USER") != null) {
+			Log.info("Accediendo a añadir una tarea");
+			resultado = "exito";
+		}
+		return resultado;
+	}
+	
+	public String atras(){
+		String resultado = "";
+		FacesContext fc = FacesContext.getCurrentInstance();
+		// Si no existe un usuario en sesión
+		if (fc.getExternalContext().getSessionMap().get("LOGGEDIN_USER") != null) {
+			Log.info("Volviendo a la vista principal de usuario");
+			resultado = "exito";
+		}
+		return resultado;
 	}
 
 	// Se inicia correctamente el MBean inyectado si JSF lo hubiera crea
