@@ -1,6 +1,4 @@
 package com.sdi.tests.Tests;
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 
 import org.junit.After;
@@ -9,7 +7,9 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
@@ -218,10 +218,16 @@ public class PlantillaSDI2_Tests1617 {
 //		assertTrue(false);
 //    }
 //	//PR33: Salir de sesión desde cuenta de administrador.
-//	@Test
-//    public void prueba33() {
-//		assertTrue(false);
-//    }
+	@Test
+    public void prueba33() {
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		
+		WebElement signOut = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[3]/a/span", 2).get(0);
+		signOut.click();
+		//Vuelve a la pagina index por lo que aparece el field login
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div/table/tbody/tr[1]/td[2]/input", 2);
+    }
 //	//PR34: Salir de sesión desde cuenta de usuario normal.
 //	@Test
 //    public void prueba34() {
