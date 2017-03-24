@@ -229,10 +229,16 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div/table/tbody/tr[1]/td[2]/input", 2);
     }
 //	//PR34: Salir de sesión desde cuenta de usuario normal.
-//	@Test
-//    public void prueba34() {
-//		assertTrue(false);
-//    }
+	@Test
+    public void prueba34() {
+		new PO_LoginForm().rellenaFormulario(driver, "mary", "mary1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span[2]", 2);
+		
+		WebElement signOut = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[4]/a/span", 2).get(0);
+		signOut.click();
+		//Vuelve a la pagina index por lo que aparece el field login
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div/table/tbody/tr[1]/td[2]/input", 2);
+    }
 //	//PR35: Cambio del idioma por defecto a un segundo idioma. (Probar algunas vistas)
 //	@Test
 //    public void prueba35() {
