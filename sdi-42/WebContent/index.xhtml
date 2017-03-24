@@ -35,7 +35,7 @@
 					<p:password id="password" required="true" label="Password"
 						value="#{login.user.password}" />
 				</h:panelGrid>
-				<p:commandButton type="submit" value="#{msgs.botonAceptar}"
+				<p:commandButton id="botonAceptar" type="submit" value="#{msgs.botonAceptar}"
 					action="#{login.verify}" update="form-principal" />
 			</p:panel>
 		</h:form>
