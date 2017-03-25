@@ -1,5 +1,7 @@
 package com.sdi.tests.Tests;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -16,6 +18,10 @@ import org.openqa.selenium.firefox.FirefoxProfile;
 import com.sdi.tests.pageobjects.PO_LoginForm;
 import com.sdi.tests.pageobjects.PO_RegisterForm;
 import com.sdi.tests.utils.SeleniumUtils;
+import com.sdi.business.exception.BusinessException;
+import com.sdi.business.impl.SimpleServicesFactory;
+import com.sdi.dto.User;
+import com.sdi.infrastructure.Factories;
 
 //Ordenamos las pruebas por el nombre del método
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
@@ -76,11 +82,42 @@ public class PlantillaSDI2_Tests1617 {
 //    public void prueba04() {
 //		assertTrue(false);
 //    }
-//	//PR05: Visualizar correctamente la lista de usuarios normales. 
-//	@Test
-//    public void prueba05() {
-//		assertTrue(false);
-//    }
+	//PR05: Visualizar correctamente la lista de usuarios normales. 
+	@Test
+    public void prueba05() throws InterruptedException {
+		//Se inicia la sesion en admin
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		//Accedemos al listado de usuarios
+		WebElement listaUsers = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		listaUsers.click();
+		Thread.sleep(1000);
+		
+		try {
+			List<User> users = Factories.services.getUserService().findAll();
+			List<User> aux = new ArrayList<User>();
+			for(User user : users){
+				if(user.getIsAdmin())
+					aux.add(user);
+			}
+			//Ahora borramos de la lista de usuarios los que sean admin
+			users.removeAll(aux);
+			//Recorremos la lista de users, para comprobar que están presentes en la vista actual
+			for(User user : users){
+				//Miramos si el nombre de usuario está presente en la vista actual
+				String nombre = user.getLogin();
+				String email = user.getEmail();
+				String id = String.valueOf(user.getId());
+				SeleniumUtils.textoPresentePagina(driver, id);
+				SeleniumUtils.textoPresentePagina(driver, email);
+				SeleniumUtils.textoPresentePagina(driver, nombre);
+			}
+			
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
 	//PR06: Cambiar el estado de un usuario de ENABLED a DISABLED. Y tratar de entrar con el usuario que se desactivado.
 	@Test
     public void prueba06() throws InterruptedException {

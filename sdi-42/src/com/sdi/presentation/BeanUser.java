@@ -14,6 +14,16 @@ import com.sdi.dto.User;
 public class BeanUser extends User implements Serializable {
 	private static final long serialVersionUID = 55556L;
 
+	private String repassword ="";
+	
+	public String getRepassword() {
+		return repassword;
+	}
+
+	public void setRepassword(String repassword) {
+		this.repassword = repassword;
+	}
+
 	public BeanUser() {
 		iniciaUser(null);
 	}

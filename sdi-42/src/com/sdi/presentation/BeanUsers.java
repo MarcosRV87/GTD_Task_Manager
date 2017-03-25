@@ -130,8 +130,9 @@ public class BeanUsers implements Serializable {
 			service = Factories.services.getUserService();
 			// Salvamos o actualizamos el user segun sea una operacion de alta
 			// o de edici��n
+			User aux = service.findUserByName(user.getLogin());
 			if (user.getId() == null) {
-				if(user.getLogin().equals(service.findUserByName(user.getLogin()))==false)
+				if((aux==null) && (user.getPassword().equals(user.getRepassword())))
 					service.registerUser(user);
 				else
 					return "fracaso";
