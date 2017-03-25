@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -81,7 +80,7 @@ public class PlantillaSDI2_Tests1617 {
 //    public void prueba05() {
 //		assertTrue(false);
 //    }
-//	//PR06: Cambiar el estado de un usuario de ENABLED a DISABLED. Y tratar de entrar con el usuario que se desactivado.
+	//PR06: Cambiar el estado de un usuario de ENABLED a DISABLED. Y tratar de entrar con el usuario que se desactivado.
 	@Test
     public void prueba06() throws InterruptedException {
 		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
@@ -115,7 +114,7 @@ public class PlantillaSDI2_Tests1617 {
 		Thread.sleep(1000);
 		SeleniumUtils.textoNoPresentePagina(driver, "DISABLED");
     }
-//	//PR07: Cambiar el estado de un usuario a DISABLED a ENABLED. Y Y tratar de entrar con el usuario que se ha activado.
+	//PR07: Cambiar el estado de un usuario a DISABLED a ENABLED. Y Y tratar de entrar con el usuario que se ha activado.
 	@Test
     public void prueba07() throws InterruptedException {
 		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
@@ -165,11 +164,31 @@ public class PlantillaSDI2_Tests1617 {
 //    public void prueba10() {
 //		assertTrue(false);
 //    }
-//	//PR11: Borrar  una cuenta de usuario normal y datos relacionados.
-//	@Test
-//    public void prueba11() {
-//		assertTrue(false);
-//    }
+	//PR11: Borrar  una cuenta de usuario normal y datos relacionados.
+	@Test
+    public void prueba11() throws InterruptedException {
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
+		WebElement listaUsers = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		listaUsers.click();
+		//Ahora que mostramos los users probamos a eliminar el user hola
+		WebElement deleteUser = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[4]/td[6]/a", 2).get(0);
+		deleteUser.click();
+		Thread.sleep(1000);
+		SeleniumUtils.textoNoPresentePagina(driver, "hola@hola.com");
+		SeleniumUtils.textoNoPresentePagina(driver, "hola");
+		SeleniumUtils.textoNoPresentePagina(driver, "15");
+		//Salimos de sesion de admin
+		WebElement signOut = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		signOut.click();
+		Thread.sleep(1000);
+		//Intentamos loggearnos como hola pero no podemos
+		new PO_LoginForm().rellenaFormulario(driver, "hola", "hola1234");
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "GTD Gestor de tareas");
+		SeleniumUtils.textoPresentePagina(driver, "Login:");
+    }
 //	//PR12: Crear una cuenta de usuario normal con datos válidos.
 //	@Test
 //    public void prueba12() {
