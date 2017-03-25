@@ -19,29 +19,29 @@
 		<h:form id="form-principal">
 			<br />
 			<br />
-			<p:dataTable id="usersTable" var="user" value="#{users.users}"
-				rows="5">
+			<p:dataTable id="usersTable" var="vuser" value="#{users.users}"
+				paginator="true" rows="8">
 				<f:facet name="header">
 					<h:outputText value="#{msgs.labelListadoUsuarios}" />
 				</f:facet>
 				<p:column>
-					<f:facet name="header">#{msgs.headerUserId}</f:facet>#{user.id}</p:column>
+					<f:facet name="header">#{msgs.headerUserId}</f:facet>#{vuser.id}</p:column>
 				<p:column>
-					<f:facet name="header">#{msgs.headerEmail}</f:facet>#{user.email}</p:column>
+					<f:facet name="header">#{msgs.headerEmail}</f:facet>#{vuser.email}</p:column>
 				<p:column>
-					<f:facet name="header">#{msgs.headerLogin}</f:facet>#{user.login}</p:column>
+					<f:facet name="header">#{msgs.headerLogin}</f:facet>#{vuser.login}</p:column>
 				<p:column>
-					<f:facet name="header">#{msgs.headerStatus}</f:facet>#{user.status}</p:column>
+					<f:facet name="header">#{msgs.headerStatus}</f:facet>#{vuser.status}</p:column>
 				<p:column>
 					<f:facet name="header">#{msgs.headerModificarStatus}</f:facet>
-					<p:commandLink value="#{msgs.deshabilitar}" action="#{users.switchStatus(user)}" type="submit"
-						rendered="#{user.status eq 'ENABLED'}" update="form-principal"></p:commandLink>
-					<p:commandLink value="#{msgs.habilitar}" action="#{users.switchStatus(user)}" type="submit"
-						rendered="#{user.status eq 'DISABLED'}" update="form-principal"></p:commandLink>
+					<p:commandLink value="#{msgs.deshabilitar}" action="#{users.switchStatus(vuser)}" type="submit"
+						rendered="#{vuser.status eq 'ENABLED'}" update="form-principal"></p:commandLink>
+					<p:commandLink value="#{msgs.habilitar}" action="#{users.switchStatus(vuser)}" type="submit"
+						rendered="#{vuser.status eq 'DISABLED'}" update="form-principal"></p:commandLink>
 				</p:column>
 				<p:column>
 					<f:facet name="header">#{msgs.headerEliminar}</f:facet>
-					<p:commandLink value="#{msgs.headerEliminar}" action="#{users.delete(user)}" type="submit"
+					<p:commandLink value="#{msgs.headerEliminar}" action="#{users.delete(vuser)}" type="submit"
 						update="form-principal"></p:commandLink>
 				</p:column>
 			</p:dataTable>

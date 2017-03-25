@@ -63,6 +63,8 @@ public class BeanLogin implements Serializable {
 	@PostConstruct
 	public void init() {
 		System.out.println("BeanLogin - PostConstruct");
+		Log.info("BeanLogin - PostConstruct");
+		Log.setLogLevel(3);
 		
 //		beanUsers = (BeanUsers) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("users");
 //		if(beanUsers == null){

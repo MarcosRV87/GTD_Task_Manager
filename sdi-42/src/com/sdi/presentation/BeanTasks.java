@@ -18,6 +18,7 @@ import alb.util.date.DateUtil;
 import alb.util.log.Log;
 
 import com.sdi.business.TaskService;
+import com.sdi.business.exception.BusinessException;
 import com.sdi.dto.Task;
 import com.sdi.dto.User;
 import com.sdi.infrastructure.Factories;
@@ -53,8 +54,8 @@ public class BeanTasks implements Serializable {
 	}
 
 	/*
-	 * public void setTask(Task task) { this.task = task; } public
-	 * Task getTask() { return task; }
+	 * public void setTask(Task task) { this.task = task; } public Task
+	 * getTask() { return task; }
 	 */
 
 	public void setTasks(List<Task> tasks) {
@@ -69,12 +70,12 @@ public class BeanTasks implements Serializable {
 				.getResourceBundle(facesContext, "msgs");
 		task.setId(null);
 		task.setTitle(bundle.getString("valorDefectoTitle"));
-//		task.setComments(bundle.getString("valorDefectoComments"));
+		// task.setComments(bundle.getString("valorDefectoComments"));
 		task.setCreated(DateUtil.today());
-//		task.setPlanned(bundle.getString("valorDefectoPlanned"));
-//		task.setFinished(bundle.getString("valorDefectoFinished"));
-//		task.setCategoryId();
-//		task.setUserId();
+		// task.setPlanned(bundle.getString("valorDefectoPlanned"));
+		// task.setFinished(bundle.getString("valorDefectoFinished"));
+		// task.setCategoryId();
+		// task.setUserId();
 	}
 
 	public String listado() {
@@ -84,9 +85,9 @@ public class BeanTasks implements Serializable {
 		try {
 			User user = (User) sessionmap.get("LOGGEDIN_USER");
 			service = Factories.services.getTaskService();
-			//Hay que obtener el id del usuario que está en sesión
+			// Hay que obtener el id del usuario que está en sesión
 			tasks = service.findInboxTasksByUserId(user.getId());
-					
+
 			return "exito"; // Nos vamos a la vista listado.xhtml
 
 		} catch (Exception e) {
@@ -96,24 +97,24 @@ public class BeanTasks implements Serializable {
 
 	}
 
-//	public String baja(Task task) {
-//		TaskService service;
-//		try {
-//			// Acceso a la implementacion de la capa de negocio
-//			// a trav��s de la factor��a
-//			service = 
-//			// Aliminamos el task seleccionado en la tabla
-//			service.deleteTask(task.getId());
-//			// Actualizamos el javabean de tasks inyectado en la tabla.
-//			tasks = (Task[]) service.findAll().toArray(new Task[0]);
-//			return "exito"; // Nos vamos a la vista de listado.
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return "error"; // Nos vamos a la vista de error
-//		}
-//
-//	}
+	// public String baja(Task task) {
+	// TaskService service;
+	// try {
+	// // Acceso a la implementacion de la capa de negocio
+	// // a trav��s de la factor��a
+	// service =
+	// // Aliminamos el task seleccionado en la tabla
+	// service.deleteTask(task.getId());
+	// // Actualizamos el javabean de tasks inyectado en la tabla.
+	// tasks = (Task[]) service.findAll().toArray(new Task[0]);
+	// return "exito"; // Nos vamos a la vista de listado.
+	//
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// return "error"; // Nos vamos a la vista de error
+	// }
+	//
+	// }
 
 	public String edit() {
 		TaskService service;
@@ -152,7 +153,7 @@ public class BeanTasks implements Serializable {
 				service.updateTask(task);
 			}
 			// Actualizamos el javabean de tasks inyectado en la tabla
-			//Mismo que antes, hay que obtener el user de la task
+			// Mismo que antes, hay que obtener el user de la task
 			tasks = service.findInboxTasksByUserId(user.getId());
 			return "exito"; // Nos vamos a la vista de listado.
 
@@ -162,8 +163,8 @@ public class BeanTasks implements Serializable {
 		}
 
 	}
-	
-	public String addTarea(){
+
+	public String addTarea() {
 		String resultado = "";
 		FacesContext fc = FacesContext.getCurrentInstance();
 		// Si no existe un usuario en sesión
@@ -173,8 +174,8 @@ public class BeanTasks implements Serializable {
 		}
 		return resultado;
 	}
-	
-	public String atras(){
+
+	public String atras() {
 		String resultado = "";
 		FacesContext fc = FacesContext.getCurrentInstance();
 		// Si no existe un usuario en sesión
@@ -196,28 +197,31 @@ public class BeanTasks implements Serializable {
 		System.out.println("BeanTasks - PostConstruct");
 		// Buscamos el task en la sesión. Esto es un patrón factoría
 		// claramente.
-		//task = (BeanTask) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("task");
-		Map<String,Object> session = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
-		if(session.get("task") == null){
+		// task = (BeanTask)
+		// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("task");
+		Map<String, Object> session = FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap();
+		if (session.get("task") == null) {
 			System.out.println("BeanTask - No existía.");
 			BeanFactory bFactory = new BeanFactoryImp();
 			task = bFactory.createBeanTask();
-			//FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("task", task);
+			// FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("task",
+			// task);
 			session.put("task", task);
 		}
-		
+
 	}
 
 	@PreDestroy
 	public void end() {
 		System.out.println("BeanTasks - PreDestroy");
 	}
-	
-	public BeanTasks(){
+
+	public BeanTasks() {
 		System.out.println("BeanTasks - No existia.");
 	}
-	
-	public String listInbox(){
+
+	public String listInbox() {
 		TaskService service;
 		Map<String, Object> sessionmap = FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap();
@@ -227,17 +231,17 @@ public class BeanTasks implements Serializable {
 			User user = (User) sessionmap.get("LOGGEDIN_USER");
 			service = Factories.services.getTaskService();
 			// Actualizamos el javabean de tasks inyectado en la tabla
-			//Mismo que antes, hay que obtener el user de la task
+			// Mismo que antes, hay que obtener el user de la task
 			tasks = service.findInboxTasksByUserId(user.getId());
-			return "exito"; 
+			return "exito";
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "error"; // Nos vamos a la vista de error.
 		}
 	}
-	
-	public String listToday(){
+
+	public String listToday() {
 		TaskService service;
 		Map<String, Object> sessionmap = FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap();
@@ -247,18 +251,18 @@ public class BeanTasks implements Serializable {
 			User user = (User) sessionmap.get("LOGGEDIN_USER");
 			service = Factories.services.getTaskService();
 			// Actualizamos el javabean de tasks inyectado en la tabla
-			//Mismo que antes, hay que obtener el user de la task
+			// Mismo que antes, hay que obtener el user de la task
 			tasks = service.findTodayTasksByUserId(user.getId());
-			
-			return "exito"; 
+
+			return "exito";
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "error"; // Nos vamos a la vista de error.
 		}
 	}
-	
-	public String listWeek(){
+
+	public String listWeek() {
 		TaskService service;
 		Map<String, Object> sessionmap = FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap();
@@ -268,20 +272,82 @@ public class BeanTasks implements Serializable {
 			User user = (User) sessionmap.get("LOGGEDIN_USER");
 			service = Factories.services.getTaskService();
 			// Actualizamos el javabean de tasks inyectado en la tabla
-			//Mismo que antes, hay que obtener el user de la task
+			// Mismo que antes, hay que obtener el user de la task
 			tasks = service.findWeekTasksByUserId(user.getId());
-			
-			return "exito"; 
+
+			return "exito";
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "error"; // Nos vamos a la vista de error.
 		}
 	}
-	
-	public String selectTask(Task task){
+
+	public String selectTask(Task task) {
 		this.task.setTask(task);
 		return "exito";
+	}
+
+	public boolean isDelayed(Task task) {
+		if (task.getPlanned().compareTo(DateUtil.today()) < 0)
+			return true;
+		else
+			return false;
+	}
+
+	public String setTaskAsFinishedInInbox(Task task) {
+		TaskService ts;
+		ts = Factories.services.getTaskService();
+
+		try {
+			User user = (User) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("LOGGEDIN_USER");
+			ts.markTaskAsFinished(task.getId());
+			Log.info("Tarea marcada como finalizada.");
+			tasks = ts.findInboxTasksByUserId(user.getId());
+			return "exito";
+		} catch (BusinessException e) {
+			Log.error("Error: Error marcando tarea como finalizada.");
+			return "fracaso";
+		}
+
+	}
+
+	public String setTaskAsFinishedInToday(Task task) {
+		TaskService ts;
+		ts = Factories.services.getTaskService();
+
+		try {
+			User user = (User) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("LOGGEDIN_USER");
+			
+			ts.markTaskAsFinished(task.getId());
+			Log.info("Tarea marcada como finalizada.");
+			tasks = ts.findTodayTasksByUserId(user.getId());
+			return "exito";
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			Log.error("Error: Error marcando tarea como finalizada.");
+			return "fracaso";
+		}
+	}
+
+	public String setTaskAsFinishedInWeek(Task task) {
+		TaskService ts;
+		ts = Factories.services.getTaskService();
+
+		try {
+			User user = (User) FacesContext.getCurrentInstance()
+					.getExternalContext().getSessionMap().get("LOGGEDIN_USER");
+			ts.markTaskAsFinished(task.getId());
+			Log.info("Tarea marcada como finalizada.");
+			tasks = ts.findWeekTasksByUserId(user.getId());
+			return "exito";
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			Log.error("Error: Error marcando tarea como finalizada.");
+			return "fracaso";
+		}
 	}
 
 }

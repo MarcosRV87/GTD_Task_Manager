@@ -9,11 +9,11 @@
 			<var>msgs</var>
 		</resource-bundle>
 	</application>
-<!-- 	<managed-bean> -->
-<!-- 		<managed-bean-name>login</managed-bean-name> -->
-<!-- 		<managed-bean-class>com.sdi.presentation.BeanLogin</managed-bean-class> -->
-<!-- 		<managed-bean-scope>session</managed-bean-scope> -->
-<!-- 	</managed-bean> -->
+	<!-- <managed-bean> -->
+	<!-- <managed-bean-name>login</managed-bean-name> -->
+	<!-- <managed-bean-class>com.sdi.presentation.BeanLogin</managed-bean-class> -->
+	<!-- <managed-bean-scope>session</managed-bean-scope> -->
+	<!-- </managed-bean> -->
 	<managed-bean>
 		<managed-bean-name>users</managed-bean-name>
 		<managed-bean-class>com.sdi.presentation.BeanUsers</managed-bean-class>
@@ -45,6 +45,18 @@
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>/restricted/*</from-view-id>
+		<navigation-case>
+			<from-action>#{tasks.listInbox}</from-action>
+			<to-view-id>/restricted/principalUser.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.listToday}</from-action>
+			<to-view-id>/restricted/listTodayTasks.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.listWeek}</from-action>
+			<to-view-id>/restricted/listWeekTasks.xhtml</to-view-id>
+		</navigation-case>
 		<navigation-case>
 			<from-action>#{login.cerrarSesion}</from-action>
 			<to-view-id>/index.xhtml</to-view-id>
@@ -92,6 +104,11 @@
 			<from-outcome>exito</from-outcome>
 			<to-view-id>/restricted/editTaskForm.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.setFinishedInInbox(vtask)}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/listWeekTasks.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>/addTareaForm.xhtml</from-view-id>
@@ -122,6 +139,35 @@
 			<from-action>#{users.salva}</from-action>
 			<from-outcome>fracaso</from-outcome>
 			<to-view-id>/altaForm.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/altaForm.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{users.salva}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/index.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{users.salva}</from-action>
+			<from-outcome>fracaso</from-outcome>
+			<to-view-id>/altaForm.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/restricted/listTodayTasks.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{tasks.setFinishedInToday(vtask)}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/restricted/listTodayTasks.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/restricted/listWeekTasks.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{tasks.setFinishedInWeek(vtask)}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/restricted/listWeekTasks.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 </faces-config>
