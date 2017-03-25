@@ -14,6 +14,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
 import com.sdi.tests.pageobjects.PO_LoginForm;
+import com.sdi.tests.pageobjects.PO_RegisterForm;
 import com.sdi.tests.utils.SeleniumUtils;
 
 //Ordenamos las pruebas por el nombre del método
@@ -188,12 +189,30 @@ public class PlantillaSDI2_Tests1617 {
 		Thread.sleep(1000);
 		SeleniumUtils.textoPresentePagina(driver, "GTD Gestor de tareas");
 		SeleniumUtils.textoPresentePagina(driver, "Login:");
+		//Faltaria mirarlo en la base de datos si fuese necesario
     }
-//	//PR12: Crear una cuenta de usuario normal con datos válidos.
-//	@Test
-//    public void prueba12() {
-//		assertTrue(false);
-//    }
+	//PR12: Crear una cuenta de usuario normal con datos válidos.
+	@Test
+    public void prueba12() throws InterruptedException {
+		//Accedemos a la pagina de alta de usuario
+		WebElement registro = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		registro.click();
+		Thread.sleep(1000);
+		//Comprobamos que accedimos bien al alta de usuario
+		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
+		SeleniumUtils.textoPresentePagina(driver, "LOGIN");
+		SeleniumUtils.textoPresentePagina(driver, "CORREO");
+		SeleniumUtils.textoPresentePagina(driver, "CONTRASEÑA");
+		SeleniumUtils.textoPresentePagina(driver, "REPITA");
+		//Rellenamos los campos correctamente para el alta de un usuario
+		new PO_RegisterForm().rellenaFormulario(driver, "PruebaAlta", "pruebaA@mail.com", "prueba12", "prueba12");
+		Thread.sleep(1000);
+		//Accedemos con el usuario que acabamos de crear para comprobar que de verdad lo creamos
+		new PO_LoginForm().rellenaFormulario(driver, "PruebaAlta", "prueba12");
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Bienvenido a tu Gestor de Tareas, PruebaAlta!");
+		
+    }
 //	//PR13: Crear una cuenta de usuario normal con login repetido.
 //	@Test
 //    public void prueba13() {
