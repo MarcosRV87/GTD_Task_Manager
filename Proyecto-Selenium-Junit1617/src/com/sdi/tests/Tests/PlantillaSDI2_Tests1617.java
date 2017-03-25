@@ -240,10 +240,31 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div/table/tbody/tr[1]/td[2]/input", 2);
     }
 //	//PR35: Cambio del idioma por defecto a un segundo idioma. (Probar algunas vistas)
-//	@Test
-//    public void prueba35() {
-//		assertTrue(false);
-//    }
+	@Test
+    public void prueba35() throws InterruptedException {
+		//Probar cambio de idioma en el index normal
+		SeleniumUtils.textoPresentePagina(driver, "Registrar usuario");
+		SeleniumUtils.textoPresentePagina(driver, "IDIOMA");
+		SeleniumUtils.textoPresentePagina(driver, "Aceptar");
+		//Cambio de idioma a ingles
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:menuIdioma", "form-cabecera:menuEng");
+		//Comprobamos que se cambio a ingles
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div/table/tbody/tr[1]/td[2]/input", 2);
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Login:");
+		SeleniumUtils.textoPresentePagina(driver, "Password:");
+		SeleniumUtils.textoPresentePagina(driver, "Accept");
+		//Accedemos como admin para probar el cambio de idioma en dicha vista
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "List Users");
+		SeleniumUtils.textoPresentePagina(driver, "Log out");
+		SeleniumUtils.textoPresentePagina(driver, "LANGUAGE");
+//		WebElement signOut = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[4]/a/span", 2).get(0);
+//		signOut.click();
+//		//Vuelve a la pagina index por lo que aparece el field login
+//		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div/table/tbody/tr[1]/td[2]/input", 2);
+    }
 //	//PR36: Cambio del idioma por defecto a un segundo idioma y vuelta al idioma por defecto. (Probar algunas vistas)
 //	@Test
 //    public void prueba36() {
