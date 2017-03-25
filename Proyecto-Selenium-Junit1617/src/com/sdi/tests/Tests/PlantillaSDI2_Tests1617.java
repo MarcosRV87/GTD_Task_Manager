@@ -247,11 +247,20 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
 		SeleniumUtils.textoPresentePagina(driver, "El campo CORREO E. presenta formato inválido (usuario@servidor.dominio)");
 	}
-//	//PR15: Crear una cuenta de usuario normal con Password incorrecta.
-//	@Test
-//    public void prueba15() {
-//		assertTrue(false);
-//    }
+	//PR15: Crear una cuenta de usuario normal con Password incorrecta.
+	@Test
+	public void prueba15() throws InterruptedException {
+		//Accedemos a la pagina de alta de usuario
+		WebElement registro = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		registro.click();
+		Thread.sleep(1000);
+		//Rellenamos los campos correctamente para el alta de un usuario
+		new PO_RegisterForm().rellenaFormulario(driver, "PruebaAlta2", "pruebaB@mail.com", "prueba", "prueba");
+		Thread.sleep(1000);
+		//No se creo el alumno porque el mail es incorrecto
+		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
+		SeleniumUtils.textoPresentePagina(driver, "La contraseña ha de tener minimo 8 caracteres conteniendo letras y números");
+	}
 //	//USUARIO
 //	//PR16: Comprobar que en Inbox sólo aparecen listadas las tareas sin categoría y que son las que tienen que. Usar paginación navegando por las tres páginas.
 //	@Test
