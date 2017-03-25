@@ -12,12 +12,12 @@
     
     <ui:define name="menubar">
 		<p:menubar id="menubar">
-			<p:menuitem value="#{msgs.botonRegistro}" action="registrarse"/>
-				<p:submenu style="float:right" label="#{msgs.textoIdioma}"
+			<p:menuitem value="#{msgs.botonRegistro}" action="#{login.register}"/>
+				<p:submenu style="float:right" id="menuIdioma" label="#{msgs.textoIdioma}"
 					icon="ui-icon-document">
-					<p:menuitem value="#{msgs.enlaceIdiomaES}"
+					<p:menuitem value="#{msgs.enlaceIdiomaES}" id="menuSpa"
 						actionListener="#{settings.setSpanish}" update="@all" />
-					<p:menuitem value="#{msgs.enlaceIdiomaEN}"
+					<p:menuitem value="#{msgs.enlaceIdiomaEN}" id="menuEng"
 						actionListener="#{settings.setEnglish}" update="@all" />
 				</p:submenu>
 		</p:menubar>

@@ -82,10 +82,39 @@ public class PlantillaSDI2_Tests1617 {
 //		assertTrue(false);
 //    }
 //	//PR06: Cambiar el estado de un usuario de ENABLED a DISABLED. Y tratar de entrar con el usuario que se desactivado.
-//	@Test
-//    public void prueba06() {
-//		assertTrue(false);
-//    }
+	@Test
+    public void prueba06() throws InterruptedException {
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
+		WebElement listaUsers = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		listaUsers.click();
+		//Ahora que visualizamos la lista de usuarios deshabilitamos a john
+		WebElement deshabJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[2]/td[5]/a", 3).get(0);
+		deshabJohn.click();
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "DISABLED");
+		//Cerramos sesion con el admin e intentamos entrar con John
+		WebElement signOut = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		signOut.click();
+		Thread.sleep(1000);
+		new PO_LoginForm().rellenaFormulario(driver, "john", "john123");
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "GTD Gestor de tareas");
+		SeleniumUtils.textoPresentePagina(driver, "Login:");
+		
+		//Una vez provado volvemos a habilitarlo para que no haya problemas posteriormente
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
+		Thread.sleep(1000);
+		WebElement listaUsers2 = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		listaUsers2.click();
+		WebElement habJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[2]/td[5]/a", 3).get(0);
+		habJohn.click();
+		Thread.sleep(1000);
+		SeleniumUtils.textoNoPresentePagina(driver, "DISABLED");
+    }
 //	//PR07: Cambiar el estado de un usuario a DISABLED a ENABLED. Y Y tratar de entrar con el usuario que se ha activado.
 //	@Test
 //    public void prueba07() {
@@ -229,24 +258,74 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div/table/tbody/tr[1]/td[2]/input", 2);
     }
 //	//PR34: Salir de sesión desde cuenta de usuario normal.
-//	@Test
-//    public void prueba34() {
-//		assertTrue(false);
-//    }
+	@Test
+    public void prueba34() {
+		new PO_LoginForm().rellenaFormulario(driver, "mary", "mary1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span[2]", 2);
+		
+		WebElement signOut = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[4]/a/span", 2).get(0);
+		signOut.click();
+		//Vuelve a la pagina index por lo que aparece el field login
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div/table/tbody/tr[1]/td[2]/input", 2);
+    }
 //	//PR35: Cambio del idioma por defecto a un segundo idioma. (Probar algunas vistas)
-//	@Test
-//    public void prueba35() {
-//		assertTrue(false);
-//    }
+	@Test
+    public void prueba35() throws InterruptedException {
+		//Probar cambio de idioma en el index normal
+		SeleniumUtils.textoPresentePagina(driver, "Registrar usuario");
+		SeleniumUtils.textoPresentePagina(driver, "IDIOMA");
+		SeleniumUtils.textoPresentePagina(driver, "Aceptar");
+		//Cambio de idioma a ingles
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:menuIdioma", "form-cabecera:menuEng");
+		//Comprobamos que se cambio a ingles
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div/table/tbody/tr[1]/td[2]/input", 2);
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Login:");
+		SeleniumUtils.textoPresentePagina(driver, "Password:");
+		SeleniumUtils.textoPresentePagina(driver, "Accept");
+		//Accedemos como admin para probar el cambio de idioma en dicha vista
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "List Users");
+		SeleniumUtils.textoPresentePagina(driver, "Log out");
+		SeleniumUtils.textoPresentePagina(driver, "LANGUAGE");
+		//Se pueden añadir mas vistas si queremos
+    }
 //	//PR36: Cambio del idioma por defecto a un segundo idioma y vuelta al idioma por defecto. (Probar algunas vistas)
-//	@Test
-//    public void prueba36() {
-//		assertTrue(false);
-//    }
+	@Test
+	public void prueba36() throws InterruptedException {
+		//Probar cambio de idioma en el index normal
+		SeleniumUtils.textoPresentePagina(driver, "Registrar usuario");
+		SeleniumUtils.textoPresentePagina(driver, "IDIOMA");
+		SeleniumUtils.textoPresentePagina(driver, "Aceptar");
+		//Cambio de idioma a ingles
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:menuIdioma", "form-cabecera:menuEng");
+		//Comprobamos que se cambio a ingles
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div/table/tbody/tr[1]/td[2]/input", 2);
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Login:");
+		SeleniumUtils.textoPresentePagina(driver, "Password:");
+		SeleniumUtils.textoPresentePagina(driver, "Accept");
+		//Volvemos a ponernos al idioma por defecto (Español)
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:menuIdioma", "form-cabecera:menuSpa");
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Registrar usuario");
+		SeleniumUtils.textoPresentePagina(driver, "IDIOMA");
+		SeleniumUtils.textoPresentePagina(driver, "Aceptar");
+		//Accedemos como admin para probar el cambio de idioma en dicha vista
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Listar Usuarios");
+		SeleniumUtils.textoPresentePagina(driver, "Cerrar");
+		SeleniumUtils.textoPresentePagina(driver, "IDIOMA");
+		//Se pueden añadir mas vistas si queremos
+	}
 //	//PR37: Intento de acceso a un  URL privado de administrador con un usuario autenticado como usuario normal.
 //	@Test
 //    public void prueba37() {
-//		assertTrue(false);
+//		new PO_LoginForm().rellenaFormulario(driver, "mary", "mary1234");
+//		driver.navigate().to("http://localhost:8280/sdi-42/restricted/principalAdmin.xhtml");
+//		
 //    }
 //	//PR38: Intento de acceso a un  URL privado de usuario normal con un usuario no autenticado.
 //	@Test
