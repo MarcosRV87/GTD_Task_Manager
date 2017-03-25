@@ -134,7 +134,7 @@ public class BeanUsers implements Serializable {
 				if(user.getLogin().equals(service.findUserByName(user.getLogin()))==false)
 					service.registerUser(user);
 				else
-					return "fallo";
+					return "fracaso";
 			} else {
 				service.updateUserDetails(user);
 			}

@@ -213,16 +213,40 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.textoPresentePagina(driver, "Bienvenido a tu Gestor de Tareas, PruebaAlta!");
 		
     }
-//	//PR13: Crear una cuenta de usuario normal con login repetido.
-//	@Test
-//    public void prueba13() {
-//		assertTrue(false);
-//    }
-//	//PR14: Crear una cuenta de usuario normal con Email incorrecto.
-//	@Test
-//    public void prueba14() {
-//		assertTrue(false);
-//    }
+	//PR13: Crear una cuenta de usuario normal con login repetido.
+	@Test
+	public void prueba13() throws InterruptedException {
+		//Accedemos a la pagina de alta de usuario
+		WebElement registro = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		registro.click();
+		Thread.sleep(1000);
+		//Comprobamos que accedimos bien al alta de usuario
+		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
+		SeleniumUtils.textoPresentePagina(driver, "LOGIN");
+		SeleniumUtils.textoPresentePagina(driver, "CORREO");
+		SeleniumUtils.textoPresentePagina(driver, "CONTRASEÑA");
+		SeleniumUtils.textoPresentePagina(driver, "REPITA");
+		//Rellenamos los campos correctamente para el alta de un usuario
+		new PO_RegisterForm().rellenaFormulario(driver, "mary", "pruebaB@mail.com", "prueba123", "prueba123");
+		Thread.sleep(1000);
+		//No se creo el alumno porque mary ya existe
+		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
+		//Habría que mostrar un mensaje y probarlo ahora
+	}
+	//PR14: Crear una cuenta de usuario normal con Email incorrecto.
+	@Test
+	public void prueba14() throws InterruptedException {
+		//Accedemos a la pagina de alta de usuario
+		WebElement registro = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		registro.click();
+		Thread.sleep(1000);
+		//Rellenamos los campos correctamente para el alta de un usuario
+		new PO_RegisterForm().rellenaFormulario(driver, "PruebaAlta2", "pruebaBmail.com", "prueba123", "prueba123");
+		Thread.sleep(1000);
+		//No se creo el alumno porque el mail es incorrecto
+		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
+		SeleniumUtils.textoPresentePagina(driver, "El campo CORREO E. presenta formato inválido (usuario@servidor.dominio)");
+	}
 //	//PR15: Crear una cuenta de usuario normal con Password incorrecta.
 //	@Test
 //    public void prueba15() {
