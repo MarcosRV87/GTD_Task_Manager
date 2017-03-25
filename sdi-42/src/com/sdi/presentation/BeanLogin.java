@@ -23,34 +23,31 @@ import com.sdi.dto.Task;
 import com.sdi.dto.User;
 import com.sdi.infrastructure.Factories;
 
-@ManagedBean
+@ManagedBean(name = "login")
 @SessionScoped
-public class BeanLogin extends User implements Serializable {
+public class BeanLogin implements Serializable {
 
-	private static final long serialVersionUID = 55556L;
+	private static final long serialVersionUID = 6L;
 
 	private String resultado = "";
 	
-//	@ManagedProperty(value="#{users}")
-//	private BeanUsers beanUsers;
-//	
-//	public BeanUsers getBeanUsers(){
-//		return this.beanUsers;
-//	}
-//	
-//	public void setBeanUsers(BeanUsers beanUsers){
-//		this.beanUsers = beanUsers;
-//	}
-	
+	public String getResultado() {
+		return resultado;
+	}
+
+	public void setResultado(String resultado) {
+		this.resultado = resultado;
+	}
+
 	@ManagedProperty(value="#{tasks}")
-	private BeanTasks beanTasks;
+	private BeanTasks tasks;
 	
-	public BeanTasks getBeanTasks(){
-		return this.beanTasks;
+	public BeanTasks getTasks(){
+		return this.tasks;
 	}
 	
-	public void setBeanTasks(BeanTasks beanTasks){
-		this.beanTasks = beanTasks;
+	public void setTasks(BeanTasks tasks){
+		this.tasks = tasks;
 	}
 
 	private User user = new User();
@@ -65,7 +62,7 @@ public class BeanLogin extends User implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		Log.info("BeanLogin - PostConstruct");
+		System.out.println("BeanLogin - PostConstruct");
 		
 //		beanUsers = (BeanUsers) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("users");
 //		if(beanUsers == null){
@@ -74,22 +71,15 @@ public class BeanLogin extends User implements Serializable {
 //			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("users", beanUsers);
 //		}
 		
-		
-		beanTasks = (BeanTasks) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("tasks");
-		if(beanTasks == null){
-			Log.info("BeanTasks - No existía.");
-			beanTasks = new BeanTasks();
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("tasks", beanTasks);
+		tasks = (BeanTasks) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(new String("tasks"));
+		if(tasks == null){
+			tasks = new BeanTasks();
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("tasks", tasks);
 		}
 	}
 
-	@PreDestroy
-	public void end() {
-		System.out.println("BeanLogin - PreDestroy");
-	}
-
 	public BeanLogin() {
-		Log.debug("Bean login no existía.");
+		System.out.println("BeanLogin - No existía.");
 	}
 
 	public void inicializarUsuario() {
@@ -137,7 +127,7 @@ public class BeanLogin extends User implements Serializable {
 					}else{
 						List<Task> auxTasks = new ArrayList<Task>();
 						auxTasks = ts.findInboxTasksByUserId(user.getId());
-						beanTasks.setTasks(auxTasks);
+						tasks.setTasks(auxTasks);
 						resultado = "client";
 					}
 					Log.info("El usuario [%s] ha iniciado sesión",
@@ -154,27 +144,6 @@ public class BeanLogin extends User implements Serializable {
 			} catch (BusinessException e) {
 				Log.debug("No se ha encontrado un usuario con las credenciales introducidas.");
 			}
-		} else {
-			resultado = "fracaso";
-			Log.info("Ya existe un usuario en sesión");
-			fc.addMessage(
-					null,
-					new FacesMessage(
-							FacesMessage.SEVERITY_ERROR,
-							"Usuario en sesión",
-							"Hay un usuario logeado, para logearte con otra cuenta debes cerrar la sesión con tu cuenta actual."));
-		}
-
-		return resultado;
-	}
-	
-	public String register() {
-		FacesContext fc = FacesContext.getCurrentInstance();
-		// Si no existe un usuario en sesión
-		if (fc.getExternalContext().getSessionMap().get("LOGGEDIN_USER") == null) {
-			Log.info("Accediendo al registro de usuario");
-			resultado = "exito";
-			// TODO Cargar las categorías y las tareas del usuario.
 		} else {
 			resultado = "fracaso";
 			Log.info("Ya existe un usuario en sesión");

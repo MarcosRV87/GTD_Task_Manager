@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<p:panelGrid id="Grid" columns="2" cellpadding="5">
+  #{msgs.titulo} 
+  <h:panelGroup>
+			<p:inputText value="#{task.title}" required="true"
+				requiredMessage="#{msgs.formAlta_login_requiredMessage}"
+				id="title">
+			</p:inputText>
+			<p:message for="title" />
+		</h:panelGroup>
+  
+  #{msgs.comentarios} 
+  <h:panelGroup>
+			<p:inputText value="#{task.comments}" required="true"
+				id="comments">
+			</p:inputText>
+			<p:message for="comments" />
+		</h:panelGroup>
+  
+  #{msgs.planificada}
+  <h:panelGroup>
+			<p:outputLabel for="planned" />
+        <p:calendar id="planned" value="#{task.planned}" required="true"/>
+		</h:panelGroup>  
+  
+  #{msgs.categoria}
+  <h:panelGroup>
+			<p:inputText
+				id="category">
+			</p:inputText>
+			<p:message for="category" />
+		</h:panelGroup>
+		<h:commandButton value="#{msgs.botonSalvar}"
+			action="#{tasks.salva}" update="Grid" process="@form">
+		</h:commandButton>
+	</p:panelGrid>
+</ui:composition>

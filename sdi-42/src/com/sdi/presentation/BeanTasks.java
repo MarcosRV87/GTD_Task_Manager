@@ -12,6 +12,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 
 import alb.util.date.DateUtil;
 import alb.util.log.Log;
@@ -46,11 +47,6 @@ public class BeanTasks implements Serializable {
 	}
 
 	private List<Task> tasks = null;
-
-/*	SUPRIMIDO EJERCICIO 21-c
- * public BeanTasks() {
-		iniciaTask(null);
-	}*/
 
 	public List<Task> getTasks() {
 		return (tasks);
@@ -200,13 +196,25 @@ public class BeanTasks implements Serializable {
 		System.out.println("BeanTasks - PostConstruct");
 		// Buscamos el task en la sesión. Esto es un patrón factoría
 		// claramente.
-		BeanFactory bFactory = new BeanFactoryImp();
-		task = bFactory.createBeanTask();
+		//task = (BeanTask) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("task");
+		Map<String,Object> session = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+		if(session.get("task") == null){
+			System.out.println("BeanTask - No existía.");
+			BeanFactory bFactory = new BeanFactoryImp();
+			task = bFactory.createBeanTask();
+			//FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("task", task);
+			session.put("task", task);
+		}
+		
 	}
 
 	@PreDestroy
 	public void end() {
 		System.out.println("BeanTasks - PreDestroy");
+	}
+	
+	public BeanTasks(){
+		System.out.println("BeanTasks - No existia.");
 	}
 	
 	public String listInbox(){
@@ -270,4 +278,10 @@ public class BeanTasks implements Serializable {
 			return "error"; // Nos vamos a la vista de error.
 		}
 	}
+	
+	public String selectTask(Task task){
+		this.task.setTask(task);
+		return "exito";
+	}
+
 }

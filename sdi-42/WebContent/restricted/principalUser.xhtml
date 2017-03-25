@@ -23,20 +23,25 @@
 			<p>Bienvenido a tu Gestor de Tareas, #{LOGGEDIN_USER.login}!</p>
 			<p>Escoge una de las opciones en la barra de navegación para la
 				gestión de tareas.</p>
-
-			<p:dataTable id="tasksTable" var="task" value="#{tasks.tasks}"
+		
+			<p:dataTable id="tasksTable" var="vtask" value="#{tasks.tasks}"
 				rows="5">
 				<f:facet name="header">
 					<h:outputText value="#{msgs.labelListadoUsuarios}" />
 				</f:facet>
 				<p:column>
-					<f:facet name="header">#{msgs.headerUserId}</f:facet>#{task.id}</p:column>
+					<f:facet name="header">#{msgs.headerUserId}</f:facet>#{vtask.id}</p:column>
 				<p:column>
-					<f:facet name="header">#{msgs.headerTitle}</f:facet>#{task.title}</p:column>
+					<f:facet name="header">#{msgs.headerTitle}</f:facet>#{vtask.title}</p:column>
 				<p:column>
-					<f:facet name="header">#{msgs.headerComments}</f:facet>#{task.comments}</p:column>
+					<f:facet name="header">#{msgs.headerComments}</f:facet>#{vtask.comments}</p:column>
 				<p:column>
-					<f:facet name="header">#{msgs.headerPlanned}</f:facet>#{task.planned}</p:column>
+					<f:facet name="header">#{msgs.headerPlanned}</f:facet>#{vtask.planned}</p:column>
+
+				<p:column>
+					<f:facet name="header">#{msgs.headerEditar}</f:facet>
+					<p:commandLink value="#{msgs.linkEditar}" action="#{tasks.selectTask(vtask)}"></p:commandLink>
+				</p:column>
 			</p:dataTable>
 		</h:form>
 	</ui:define>

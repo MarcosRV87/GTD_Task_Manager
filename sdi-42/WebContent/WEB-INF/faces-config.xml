@@ -9,6 +9,11 @@
 			<var>msgs</var>
 		</resource-bundle>
 	</application>
+<!-- 	<managed-bean> -->
+<!-- 		<managed-bean-name>login</managed-bean-name> -->
+<!-- 		<managed-bean-class>com.sdi.presentation.BeanLogin</managed-bean-class> -->
+<!-- 		<managed-bean-scope>session</managed-bean-scope> -->
+<!-- 	</managed-bean> -->
 	<managed-bean>
 		<managed-bean-name>users</managed-bean-name>
 		<managed-bean-class>com.sdi.presentation.BeanUsers</managed-bean-class>
@@ -22,11 +27,6 @@
 	<managed-bean>
 		<managed-bean-name>settings</managed-bean-name>
 		<managed-bean-class>com.sdi.presentation.BeanSettings</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>login</managed-bean-name>
-		<managed-bean-class>com.sdi.presentation.BeanLogin</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<navigation-rule>
@@ -68,8 +68,7 @@
 			<to-view-id>/index.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-action>#{login.register}</from-action>
-			<from-outcome>exito</from-outcome>
+			<from-outcome>registrarse</from-outcome>
 			<to-view-id>/altaForm.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
@@ -87,6 +86,11 @@
 			<from-action>#{tasks.addTarea}</from-action>
 			<from-outcome>exito</from-outcome>
 			<to-view-id>/addTareaForm.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.selectTask}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/restricted/editTaskForm.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>

@@ -19,7 +19,8 @@ public class BeanTask extends Task implements Serializable {
 	private static final long serialVersionUID = 55556L;
 
 	public BeanTask() {
-		iniciaTask(null);
+		System.out.println("BeanTask - No existia.");
+		//iniciaTask(null);
 	}
 
 	// Este método es necesario para copiar la tarea a editar cuando
