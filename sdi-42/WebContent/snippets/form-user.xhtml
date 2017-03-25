@@ -39,7 +39,7 @@
   
   #{msgs.repassword}
   <h:panelGroup>
-			<p:password required="true"
+			<p:password value="#{user.repassword}" required="true"
 				requiredMessage="#{msgs.formAlta_repassword_requiredMessage}"
 				validatorMessage="#{msgs.formAlta_repassword_validatorMessage}"
 				id="repassword">
@@ -47,7 +47,7 @@
 			</p:password>
 			<p:message for="repassword" />
 		</h:panelGroup>
-		<h:commandButton value="#{msgs.botonSalvar}"
+		<h:commandButton value="#{msgs.botonSalvar}" id="botonGuardar"
 			action="#{users.salva}" update="Grid" process="@form">
 		</h:commandButton>
 	</p:panelGrid>

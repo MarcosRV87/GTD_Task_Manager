@@ -1,5 +1,7 @@
 package com.sdi.tests.Tests;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -7,7 +9,6 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -15,7 +16,12 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
 import com.sdi.tests.pageobjects.PO_LoginForm;
+import com.sdi.tests.pageobjects.PO_RegisterForm;
 import com.sdi.tests.utils.SeleniumUtils;
+import com.sdi.business.exception.BusinessException;
+import com.sdi.business.impl.SimpleServicesFactory;
+import com.sdi.dto.User;
+import com.sdi.infrastructure.Factories;
 
 //Ordenamos las pruebas por el nombre del método
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
@@ -76,12 +82,43 @@ public class PlantillaSDI2_Tests1617 {
 //    public void prueba04() {
 //		assertTrue(false);
 //    }
-//	//PR05: Visualizar correctamente la lista de usuarios normales. 
-//	@Test
-//    public void prueba05() {
-//		assertTrue(false);
-//    }
-//	//PR06: Cambiar el estado de un usuario de ENABLED a DISABLED. Y tratar de entrar con el usuario que se desactivado.
+	//PR05: Visualizar correctamente la lista de usuarios normales. 
+	@Test
+    public void prueba05() throws InterruptedException {
+		//Se inicia la sesion en admin
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		//Accedemos al listado de usuarios
+		WebElement listaUsers = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		listaUsers.click();
+		Thread.sleep(1000);
+		
+		try {
+			List<User> users = Factories.services.getUserService().findAll();
+			List<User> aux = new ArrayList<User>();
+			for(User user : users){
+				if(user.getIsAdmin())
+					aux.add(user);
+			}
+			//Ahora borramos de la lista de usuarios los que sean admin
+			users.removeAll(aux);
+			//Recorremos la lista de users, para comprobar que están presentes en la vista actual
+			for(User user : users){
+				//Miramos si el nombre de usuario está presente en la vista actual
+				String nombre = user.getLogin();
+				String email = user.getEmail();
+				String id = String.valueOf(user.getId());
+				SeleniumUtils.textoPresentePagina(driver, id);
+				SeleniumUtils.textoPresentePagina(driver, email);
+				SeleniumUtils.textoPresentePagina(driver, nombre);
+			}
+			
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+	//PR06: Cambiar el estado de un usuario de ENABLED a DISABLED. Y tratar de entrar con el usuario que se desactivado.
 	@Test
     public void prueba06() throws InterruptedException {
 		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
@@ -103,7 +140,7 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.textoPresentePagina(driver, "GTD Gestor de tareas");
 		SeleniumUtils.textoPresentePagina(driver, "Login:");
 		
-		//Una vez provado volvemos a habilitarlo para que no haya problemas posteriormente
+		//Una vez probado volvemos a habilitarlo para que no haya problemas posteriormente
 		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
 		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
 		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
@@ -115,11 +152,41 @@ public class PlantillaSDI2_Tests1617 {
 		Thread.sleep(1000);
 		SeleniumUtils.textoNoPresentePagina(driver, "DISABLED");
     }
-//	//PR07: Cambiar el estado de un usuario a DISABLED a ENABLED. Y Y tratar de entrar con el usuario que se ha activado.
-//	@Test
-//    public void prueba07() {
-//		assertTrue(false);
-//    }
+	//PR07: Cambiar el estado de un usuario a DISABLED a ENABLED. Y Y tratar de entrar con el usuario que se ha activado.
+	@Test
+    public void prueba07() throws InterruptedException {
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
+		WebElement listaUsers = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		listaUsers.click();
+		//Ahora que visualizamos la lista de usuarios deshabilitamos a john
+		WebElement deshabJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[2]/td[5]/a", 3).get(0);
+		deshabJohn.click();
+		Thread.sleep(1000);
+		//Salimos de sesion con el admin
+		WebElement signOut = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		signOut.click();
+		Thread.sleep(1000);
+		//Una vez hecho volvemos a habilitarlo para realizar la posterior prueba
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
+		Thread.sleep(1000);
+		WebElement listaUsers2 = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		listaUsers2.click();
+		WebElement habJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[2]/td[5]/a", 3).get(0);
+		habJohn.click();
+		Thread.sleep(1000);
+		//Ahora cerramos sesion y la iniciamos como john, que al estar habilitado deberia dejarnos
+		WebElement signOut2 = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		signOut2.click();
+		Thread.sleep(1000);
+		//Entramos como John
+		new PO_LoginForm().rellenaFormulario(driver, "john", "john123");
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Bienvenido a tu Gestor de Tareas, john!");
+    }
 //	//PR08: Ordenar por Login
 //	@Test
 //    public void prueba08() {
@@ -135,31 +202,102 @@ public class PlantillaSDI2_Tests1617 {
 //    public void prueba10() {
 //		assertTrue(false);
 //    }
-//	//PR11: Borrar  una cuenta de usuario normal y datos relacionados.
-//	@Test
-//    public void prueba11() {
-//		assertTrue(false);
-//    }
-//	//PR12: Crear una cuenta de usuario normal con datos válidos.
-//	@Test
-//    public void prueba12() {
-//		assertTrue(false);
-//    }
-//	//PR13: Crear una cuenta de usuario normal con login repetido.
-//	@Test
-//    public void prueba13() {
-//		assertTrue(false);
-//    }
-//	//PR14: Crear una cuenta de usuario normal con Email incorrecto.
-//	@Test
-//    public void prueba14() {
-//		assertTrue(false);
-//    }
-//	//PR15: Crear una cuenta de usuario normal con Password incorrecta.
-//	@Test
-//    public void prueba15() {
-//		assertTrue(false);
-//    }
+	//PR11: Borrar  una cuenta de usuario normal y datos relacionados.
+	@Test
+    public void prueba11() throws InterruptedException {
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
+		WebElement listaUsers = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		listaUsers.click();
+		//Ahora que mostramos los users probamos a eliminar el user hola
+		WebElement deleteUser = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[4]/td[6]/a", 2).get(0);
+		deleteUser.click();
+		Thread.sleep(1000);
+		SeleniumUtils.textoNoPresentePagina(driver, "hola@hola.com");
+		SeleniumUtils.textoNoPresentePagina(driver, "hola");
+		SeleniumUtils.textoNoPresentePagina(driver, "15");
+		//Salimos de sesion de admin
+		WebElement signOut = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		signOut.click();
+		Thread.sleep(1000);
+		//Intentamos loggearnos como hola pero no podemos
+		new PO_LoginForm().rellenaFormulario(driver, "hola", "hola1234");
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "GTD Gestor de tareas");
+		SeleniumUtils.textoPresentePagina(driver, "Login:");
+		//Faltaria mirarlo en la base de datos si fuese necesario
+    }
+	//PR12: Crear una cuenta de usuario normal con datos válidos.
+	@Test
+    public void prueba12() throws InterruptedException {
+		//Accedemos a la pagina de alta de usuario
+		WebElement registro = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		registro.click();
+		Thread.sleep(1000);
+		//Comprobamos que accedimos bien al alta de usuario
+		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
+		SeleniumUtils.textoPresentePagina(driver, "LOGIN");
+		SeleniumUtils.textoPresentePagina(driver, "CORREO");
+		SeleniumUtils.textoPresentePagina(driver, "CONTRASEÑA");
+		SeleniumUtils.textoPresentePagina(driver, "REPITA");
+		//Rellenamos los campos correctamente para el alta de un usuario
+		new PO_RegisterForm().rellenaFormulario(driver, "PruebaAlta", "pruebaA@mail.com", "prueba12", "prueba12");
+		Thread.sleep(1000);
+		//Accedemos con el usuario que acabamos de crear para comprobar que de verdad lo creamos
+		new PO_LoginForm().rellenaFormulario(driver, "PruebaAlta", "prueba12");
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Bienvenido a tu Gestor de Tareas, PruebaAlta!");
+		
+    }
+	//PR13: Crear una cuenta de usuario normal con login repetido.
+	@Test
+	public void prueba13() throws InterruptedException {
+		//Accedemos a la pagina de alta de usuario
+		WebElement registro = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		registro.click();
+		Thread.sleep(1000);
+		//Comprobamos que accedimos bien al alta de usuario
+		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
+		SeleniumUtils.textoPresentePagina(driver, "LOGIN");
+		SeleniumUtils.textoPresentePagina(driver, "CORREO");
+		SeleniumUtils.textoPresentePagina(driver, "CONTRASEÑA");
+		SeleniumUtils.textoPresentePagina(driver, "REPITA");
+		//Rellenamos los campos correctamente para el alta de un usuario
+		new PO_RegisterForm().rellenaFormulario(driver, "mary", "pruebaB@mail.com", "prueba123", "prueba123");
+		Thread.sleep(1000);
+		//No se creo el alumno porque mary ya existe
+		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
+		//Habría que mostrar un mensaje y probarlo ahora
+	}
+	//PR14: Crear una cuenta de usuario normal con Email incorrecto.
+	@Test
+	public void prueba14() throws InterruptedException {
+		//Accedemos a la pagina de alta de usuario
+		WebElement registro = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		registro.click();
+		Thread.sleep(1000);
+		//Rellenamos los campos correctamente para el alta de un usuario
+		new PO_RegisterForm().rellenaFormulario(driver, "PruebaAlta2", "pruebaBmail.com", "prueba123", "prueba123");
+		Thread.sleep(1000);
+		//No se creo el alumno porque el mail es incorrecto
+		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
+		SeleniumUtils.textoPresentePagina(driver, "El campo CORREO E. presenta formato inválido (usuario@servidor.dominio)");
+	}
+	//PR15: Crear una cuenta de usuario normal con Password incorrecta.
+	@Test
+	public void prueba15() throws InterruptedException {
+		//Accedemos a la pagina de alta de usuario
+		WebElement registro = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		registro.click();
+		Thread.sleep(1000);
+		//Rellenamos los campos correctamente para el alta de un usuario
+		new PO_RegisterForm().rellenaFormulario(driver, "PruebaAlta2", "pruebaB@mail.com", "prueba", "prueba");
+		Thread.sleep(1000);
+		//No se creo el alumno porque el mail es incorrecto
+		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
+		SeleniumUtils.textoPresentePagina(driver, "La contraseña ha de tener minimo 8 caracteres conteniendo letras y números");
+	}
 //	//USUARIO
 //	//PR16: Comprobar que en Inbox sólo aparecen listadas las tareas sin categoría y que son las que tienen que. Usar paginación navegando por las tres páginas.
 //	@Test
