@@ -91,13 +91,18 @@
 			<from-outcome>exito</from-outcome>
 			<to-view-id>/restricted/listUsers.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-action>#{users.resetDatabase}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/restricted/principalAdmin.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>/restricted/principalUser.xhtml</from-view-id>
 		<navigation-case>
 			<from-action>#{tasks.addTarea}</from-action>
 			<from-outcome>exito</from-outcome>
-			<to-view-id>/addTareaForm.xhtml</to-view-id>
+			<to-view-id>/addTaskForm.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-action>#{tasks.selectTask}</from-action>
@@ -111,7 +116,15 @@
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
-		<from-view-id>/addTareaForm.xhtml</from-view-id>
+		<from-view-id>/restricted/listUsers.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{users.resetDatabase}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/restricted/principalAdmin.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/restricted/addTaskForm.xhtml</from-view-id>
 		<navigation-case>
 			<from-action>#{tasks.atras}</from-action>
 			<from-outcome>exito</from-outcome>
@@ -125,7 +138,7 @@
 		<navigation-case>
 			<from-action>#{tasks.atras}</from-action>
 			<from-outcome>fracaso</from-outcome>
-			<to-view-id>/addTareaForm.xhtml</to-view-id>
+			<to-view-id>/restricted/addTaskForm.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>

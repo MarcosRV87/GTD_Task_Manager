@@ -7,5 +7,6 @@ public interface UserDao extends GenericDao<User, Long>{
 
 	User findByLogin(String login);
 	User findByLoginAndPassword(String login, String password);
+	void resetDatabase();
 	
 }

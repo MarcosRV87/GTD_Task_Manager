@@ -1,10 +1,15 @@
 package com.sdi.persistence.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -178,5 +183,51 @@ public class JdbcTemplate {
 			ps.setObject(idx, arg);
 		}
 	}
+	
+	public void executeScript() {
+        String scriptFile = Jdbc.getResetDBScript();
+        List<String> scriptData = new ArrayList<String>();
+        BufferedReader br = null;
+
+        try {
+
+            InputStream stream = Jdbc.class.getClassLoader()
+                    .getResourceAsStream(scriptFile);
+            br = new BufferedReader(new InputStreamReader(stream));
+            String line;
+            line = br.readLine();
+
+            while (line != null) {
+                scriptData.add(line);
+                line = br.readLine();
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            try {
+                br.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = Jdbc.getCurrentConnection();
+            for (String line : scriptData)
+            {
+                ps = con.prepareStatement(line);
+                ps.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            throw new PersistenceException(e);
+        } finally {
+            Jdbc.close(ps, con);
+        }
+
+    }
 
 }

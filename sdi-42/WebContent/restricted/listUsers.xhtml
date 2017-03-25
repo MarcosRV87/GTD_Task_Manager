@@ -11,6 +11,8 @@
 
 	<ui:define name="menubar">
 		<p:menubar id="menubar">
+			<p:menuitem value="#{msgs.resetDatabase}"
+				action="#{users.resetDatabase}" />
 			<ui:include src="/snippets/options.xhtml" />
 		</p:menubar>
 	</ui:define>
@@ -26,22 +28,25 @@
 				</f:facet>
 				<p:column>
 					<f:facet name="header">#{msgs.headerUserId}</f:facet>#{vuser.id}</p:column>
-				<p:column>
+				<p:column sortBy="#{vuser.email}">
 					<f:facet name="header">#{msgs.headerEmail}</f:facet>#{vuser.email}</p:column>
-				<p:column>
+				<p:column sortBy="#{vuser.login}">
 					<f:facet name="header">#{msgs.headerLogin}</f:facet>#{vuser.login}</p:column>
-				<p:column>
+				<p:column sortBy="#{vuser.status}">
 					<f:facet name="header">#{msgs.headerStatus}</f:facet>#{vuser.status}</p:column>
 				<p:column>
 					<f:facet name="header">#{msgs.headerModificarStatus}</f:facet>
-					<p:commandLink value="#{msgs.deshabilitar}" action="#{users.switchStatus(vuser)}" type="submit"
+					<p:commandLink value="#{msgs.deshabilitar}"
+						action="#{users.switchStatus(vuser)}" type="submit"
 						rendered="#{vuser.status eq 'ENABLED'}" update="form-principal"></p:commandLink>
-					<p:commandLink value="#{msgs.habilitar}" action="#{users.switchStatus(vuser)}" type="submit"
+					<p:commandLink value="#{msgs.habilitar}"
+						action="#{users.switchStatus(vuser)}" type="submit"
 						rendered="#{vuser.status eq 'DISABLED'}" update="form-principal"></p:commandLink>
 				</p:column>
 				<p:column>
 					<f:facet name="header">#{msgs.headerEliminar}</f:facet>
-					<p:commandLink value="#{msgs.headerEliminar}" action="#{users.delete(vuser)}" type="submit"
+					<p:commandLink value="#{msgs.headerEliminar}"
+						action="#{users.delete(vuser)}" type="submit"
 						update="form-principal"></p:commandLink>
 				</p:column>
 			</p:dataTable>

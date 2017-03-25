@@ -164,6 +164,7 @@ public class BeanTasks implements Serializable {
 
 	}
 
+	//
 	public String addTarea() {
 		String resultado = "";
 		FacesContext fc = FacesContext.getCurrentInstance();
@@ -175,6 +176,7 @@ public class BeanTasks implements Serializable {
 		return resultado;
 	}
 
+	//TODO Quitar este método de aquí que me ta dando tirria... y el de encima (addTarea) también
 	public String atras() {
 		String resultado = "";
 		FacesContext fc = FacesContext.getCurrentInstance();

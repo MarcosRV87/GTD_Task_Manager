@@ -85,4 +85,9 @@ public class UserDaoJdbcImpl implements UserDao {
 				new UserMapper(), login, password);
 	}
 
+	@Override
+	public void resetDatabase() {
+		jdbcTemplate.executeScript();
+	}
+
 }

@@ -11,6 +11,7 @@ import java.sql.SQLTimeoutException;
 import java.util.Properties;
 
 
+
 import javax.sql.DataSource;
 
 import org.apache.tomcat.dbcp.dbcp.BasicDataSource;
@@ -20,6 +21,7 @@ import com.sdi.persistence.PersistenceException;
 public class Jdbc {
 	private static final String DATABASE_PROPERTIES_FILE = "database.properties";
 	private static final String QUERIES_PROPERTIES_FILE = "sql_queries.properties";
+	private static final String RESET_DB_PROPERTIES_FILE = "reset_db.sql";
 	
 	private static final String DATABASE_URL;
 	private static final String DATABASE_USER;
@@ -130,6 +132,10 @@ public class Jdbc {
 			throw new PersistenceException("Wrong configutation file " + fileName );
 		}
 		return prop;
+	}
+
+	public static String getResetDBScript() {
+		return RESET_DB_PROPERTIES_FILE;
 	}
 
 }

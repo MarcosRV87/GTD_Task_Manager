@@ -36,4 +36,9 @@ public class AdminServiceImpl implements AdminService {
 		});
 	}
 
+	@Override
+	public void resetDatabase() {
+		Factories.persistence.getUserDao().resetDatabase();
+	}
+
 }

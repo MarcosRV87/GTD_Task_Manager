@@ -214,4 +214,12 @@ public class BeanUsers implements Serializable {
 	public void end() {
 		System.out.println("BeanUsers - PreDestroy");
 	}
+	
+	public String resetDatabase(){
+		AdminService as;
+		as = Factories.services.getAdminService();
+		
+		as.resetDatabase();
+		return "exito";
+	}
 }

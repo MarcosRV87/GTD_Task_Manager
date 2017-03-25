@@ -9,5 +9,6 @@ public interface AdminService {
 	public void disableUser(Long id) throws BusinessException;
 	public void enableUser(Long id) throws BusinessException;
 	public User findUserById(Long id) throws BusinessException;
+	public void resetDatabase();
 
 }
