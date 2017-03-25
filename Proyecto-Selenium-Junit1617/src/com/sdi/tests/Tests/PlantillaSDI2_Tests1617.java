@@ -103,7 +103,7 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.textoPresentePagina(driver, "GTD Gestor de tareas");
 		SeleniumUtils.textoPresentePagina(driver, "Login:");
 		
-		//Una vez provado volvemos a habilitarlo para que no haya problemas posteriormente
+		//Una vez probado volvemos a habilitarlo para que no haya problemas posteriormente
 		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
 		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
 		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
@@ -116,10 +116,40 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.textoNoPresentePagina(driver, "DISABLED");
     }
 //	//PR07: Cambiar el estado de un usuario a DISABLED a ENABLED. Y Y tratar de entrar con el usuario que se ha activado.
-//	@Test
-//    public void prueba07() {
-//		assertTrue(false);
-//    }
+	@Test
+    public void prueba07() throws InterruptedException {
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
+		WebElement listaUsers = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		listaUsers.click();
+		//Ahora que visualizamos la lista de usuarios deshabilitamos a john
+		WebElement deshabJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[2]/td[5]/a", 3).get(0);
+		deshabJohn.click();
+		Thread.sleep(1000);
+		//Salimos de sesion con el admin
+		WebElement signOut = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		signOut.click();
+		Thread.sleep(1000);
+		//Una vez hecho volvemos a habilitarlo para realizar la posterior prueba
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
+		Thread.sleep(1000);
+		WebElement listaUsers2 = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		listaUsers2.click();
+		WebElement habJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[2]/td[5]/a", 3).get(0);
+		habJohn.click();
+		Thread.sleep(1000);
+		//Ahora cerramos sesion y la iniciamos como john, que al estar habilitado deberia dejarnos
+		WebElement signOut2 = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		signOut2.click();
+		Thread.sleep(1000);
+		//Entramos como John
+		new PO_LoginForm().rellenaFormulario(driver, "john", "john123");
+		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Bienvenido a tu Gestor de Tareas, john!");
+    }
 //	//PR08: Ordenar por Login
 //	@Test
 //    public void prueba08() {
