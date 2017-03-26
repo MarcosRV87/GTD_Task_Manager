@@ -123,14 +123,25 @@ public class BeanUsers implements Serializable {
 							"Te has registrado satisfactoriamente.",
 							"Te has registrado satisfactoriamente."));
 				} else {
-					Log.info("Las contraseñas han de ser iguales");
-					fc.addMessage(
-							null,
-							new FacesMessage(
-									FacesMessage.SEVERITY_INFO,
-									"Las contraseñas han de ser iguales, inténtelo de nuevo.",
-									"Las contraseñas han de ser iguales, inténtelo de nuevo."));
-					return "fracaso";
+					if(aux!=null){
+						Log.info("Ya existe el login escogido.");
+						fc.addMessage(
+								null,
+								new FacesMessage(
+										FacesMessage.SEVERITY_INFO,
+										"Ya existe el login escogido, inténtelo de nuevo.",
+										"Ya existe el login escogido, inténtelo de nuevo."));
+						return "fracaso";
+					}else{
+						Log.info("Las contraseñas han de ser iguales");
+						fc.addMessage(
+								null,
+								new FacesMessage(
+										FacesMessage.SEVERITY_INFO,
+										"Las contraseñas han de ser iguales, inténtelo de nuevo.",
+										"Las contraseñas han de ser iguales, inténtelo de nuevo."));
+						return "fracaso";
+					}
 				}
 			} else {
 				service.updateUserDetails(user);
