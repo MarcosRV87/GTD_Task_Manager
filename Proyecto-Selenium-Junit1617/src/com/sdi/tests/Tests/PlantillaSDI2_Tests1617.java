@@ -17,6 +17,8 @@ import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
+import alb.util.date.DateUtil;
+
 import com.sdi.tests.pageobjects.PO_LoginForm;
 import com.sdi.tests.pageobjects.PO_RegisterForm;
 import com.sdi.tests.utils.SeleniumUtils;
@@ -616,7 +618,7 @@ public class PlantillaSDI2_Tests1617 {
 		//Accedemos como usuario normal para poder visualizar la lista de tareas
 		new PO_LoginForm().rellenaFormulario(driver, "mary", "mary1234");
 		Thread.sleep(1000);
-		//Hacemos click en el submenú de week
+		//Hacemos click en Añadir tarea
 		WebElement addTask = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
 		addTask.click();
 		Thread.sleep(1000);
@@ -653,11 +655,51 @@ public class PlantillaSDI2_Tests1617 {
 			e.printStackTrace();
 		}
 	}
-//	//PR28: Crear una tarea con categoría categoria1 y fecha planeada Hoy y comprobar que se muestra en la lista Hoy.
-//	@Test
-//    public void prueba28() {
-//		assertTrue(false);
-//    }
+	//PR28: Crear una tarea con categoría categoria1 y fecha planeada Hoy y comprobar que se muestra en la lista Hoy.
+	@Test
+	public void prueba28() throws InterruptedException {
+		//Accedemos como usuario normal para poder visualizar la lista de tareas
+		new PO_LoginForm().rellenaFormulario(driver, "mary", "mary1234");
+		Thread.sleep(1000);
+		//Hacemos click en Añadir Tarea
+		WebElement addTask = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		addTask.click();
+		Thread.sleep(1000);
+		//Metemos el nuevo titulo a la tarea que vamos a crear
+		WebElement titulo = driver.findElement(By.id("form-principal:title"));
+		titulo.clear();
+		titulo.click();
+		titulo.sendKeys("Prueba 28");
+		//Ponemos fecha de planificacion
+		WebElement planned = driver.findElement(By.id("form-principal:planned_input"));
+		planned.clear();
+		planned.click();
+		planned.sendKeys(DateUtil.today().toString());
+		//Asignamos que la categoria sea la categoria1
+		
+		//Guardamos la tarea que acabamos de crear
+		By boton = By.id("form-principal:botonGuardar");
+		driver.findElement(boton).click();
+		Thread.sleep(1000);
+		List<Task> tareasInbox;
+		try {
+			tareasInbox = Factories.services.getTaskService().findInboxTasksByUserId((long) 1);
+			List<Long> aux = new ArrayList<Long>();
+			for(Task tarea : tareasInbox){
+				aux.add(tarea.getId());
+			}
+			//Hacemos click en el boton de acceder a la ultima pagina para ir a la última tarea
+			WebElement pasoUltimaPagina = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[1]/span[5]/span", 2).get(0);
+			pasoUltimaPagina.click();
+			Thread.sleep(1000);
+			//Comprobamos que el ultimo id es el de la tarea que acabamos de crear en la BD
+			SeleniumUtils.textoPresentePagina(driver, "Prueba 27");
+			SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[5]/td[4]", 2).get(0).getText().equals(aux.get(aux.size()-1));
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 //	//PR29: Crear una tarea con categoría categoria1 y fecha planeada posterior a Hoy y comprobar que se muestra en la lista Semana.
 //	@Test
 //    public void prueba29() {
