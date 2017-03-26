@@ -33,7 +33,7 @@ import com.sdi.tests.utils.SeleniumUtils;
 public class PlantillaSDI2_Tests1617 {
 
 	static WebDriver driver = getDriver(); 
-	static String URL = "http://localhost:8280/sdi-42";
+	static String URL = "http://localhost:8280/sdi2-42";
 	
 	public PlantillaSDI2_Tests1617()
 	{

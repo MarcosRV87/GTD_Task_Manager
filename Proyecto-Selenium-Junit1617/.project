@@ -3,7 +3,7 @@
 	<name>Proyecto-Selenium-Junit1617</name>
 	<comment></comment>
 	<projects>
-		<project>sdi-42</project>
+		<project>sdi2-42</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
