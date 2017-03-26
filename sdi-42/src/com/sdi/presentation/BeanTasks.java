@@ -317,6 +317,8 @@ public class BeanTasks implements Serializable {
 	}
 
 	public boolean isDelayed(Task task) {
+		if(task.getPlanned()==null)
+			return false;
 		if (task.getPlanned().compareTo(DateUtil.today()) < 0)
 			return true;
 		else

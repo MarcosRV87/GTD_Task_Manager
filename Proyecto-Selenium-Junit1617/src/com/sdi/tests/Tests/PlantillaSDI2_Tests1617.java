@@ -21,6 +21,7 @@ import com.sdi.tests.pageobjects.PO_RegisterForm;
 import com.sdi.tests.utils.SeleniumUtils;
 import com.sdi.business.exception.BusinessException;
 import com.sdi.business.impl.SimpleServicesFactory;
+import com.sdi.dto.Task;
 import com.sdi.dto.User;
 import com.sdi.dto.types.UserStatus;
 import com.sdi.infrastructure.Factories;
@@ -373,12 +374,41 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
 		SeleniumUtils.textoPresentePagina(driver, "La contraseña ha de tener minimo 8 caracteres conteniendo letras y números");
 	}
-//	//USUARIO
-//	//PR16: Comprobar que en Inbox sólo aparecen listadas las tareas sin categoría y que son las que tienen que. Usar paginación navegando por las tres páginas.
-//	@Test
-//    public void prueba16() {
-//		assertTrue(false);
-//    }
+	//USUARIO
+	//PR16: Comprobar que en Inbox sólo aparecen listadas las tareas sin categoría y que son las que tienen que. Usar paginación navegando por las tres páginas.
+	@Test
+    public void prueba16() throws InterruptedException {
+		//Accedemos como usuario normal para poder visualizar la lista de tareas
+		new PO_LoginForm().rellenaFormulario(driver, "mary", "mary1234");
+		Thread.sleep(1000);
+		//Hacemos click en el submenú de inbox
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:menuListas", "form-cabecera:listInbox");
+		Thread.sleep(1000);
+		SeleniumUtils.textoNoPresentePagina(driver, "Categoria");
+		//Buscamos las tareas de inbox del usuario
+		List<Task> tareasInbox;
+		try {
+			tareasInbox = Factories.services.getTaskService().findInboxTasksByUserId((long) 1);
+			List<Task> aux1 = tareasInbox.subList(0, 7);
+			List<Task> aux2 = tareasInbox.subList(8, tareasInbox.size()-1);
+			for(Task task : aux1){
+				String idTask = String.valueOf(task.getId());
+				SeleniumUtils.textoPresentePagina(driver, idTask);
+			}
+//			Thread.sleep(1000);
+			WebElement pasoPagina = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[1]/span[4]/span", 2).get(0);
+			pasoPagina.click();
+			Thread.sleep(1000);
+			for(Task task : aux2){
+				String idTask = String.valueOf(task.getId());
+				SeleniumUtils.textoPresentePagina(driver, idTask);
+			}
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+    }
 //	//PR17: Funcionamiento correcto de la ordenación por fecha planeada.
 //	@Test
 //    public void prueba17() {

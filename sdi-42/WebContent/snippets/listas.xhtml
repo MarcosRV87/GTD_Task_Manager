@@ -4,13 +4,13 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 	
-	<p:submenu label="#{msgs.textoListas}"
+	<p:submenu id="menuListas" label="#{msgs.textoListas}"
 		icon="ui-icon-document">
-		<p:menuitem value="#{msgs.textoInbox}"
+		<p:menuitem value="#{msgs.textoInbox}" id="listInbox"
 			action="#{tasks.listInbox}" update="form-principal" />
-		<p:menuitem value="#{msgs.textoToday}"
+		<p:menuitem value="#{msgs.textoToday}" id="listToday"
 			action="#{tasks.listToday}" update="form-principal" />
-		<p:menuitem value="#{msgs.textoWeek}"
+		<p:menuitem value="#{msgs.textoWeek}" id="listWeek"
 			action="#{tasks.listWeek}" update="form-principal" />
 	</p:submenu>
 		
