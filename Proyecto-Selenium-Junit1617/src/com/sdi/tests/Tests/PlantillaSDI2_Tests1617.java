@@ -1,6 +1,9 @@
 package com.sdi.tests.Tests;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -86,11 +89,15 @@ public class PlantillaSDI2_Tests1617 {
 		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin123");
 		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div/table/tbody/tr[1]/td[2]/input", 2);
     }
-//	//PR04: Probar que la base de datos contiene los datos insertados con conexión correcta a la base de datos.
-//	@Test
-//    public void prueba04() {
-//		assertTrue(false);
-//    }
+	//PR04: Probar que la base de datos contiene los datos insertados con conexión correcta a la base de datos.
+	@Test
+    public void prueba04() throws InterruptedException {
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		Thread.sleep(1000);
+		WebElement resetDB = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		resetDB.click();
+		
+    }
 	//PR05: Visualizar correctamente la lista de usuarios normales. 
 	@Test
     public void prueba05() throws InterruptedException {
@@ -631,7 +638,8 @@ public class PlantillaSDI2_Tests1617 {
 		WebElement planned = driver.findElement(By.id("form-principal:planned_input"));
 		planned.clear();
 		planned.click();
-		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/div[2]/table/tbody/tr[5]/td[3]/a", 2).get(0).click();
+		WebElement fecha = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/div[2]/table/tbody/tr[5]/td[3]/a", 2).get(0);
+		fecha.click();
 		//Guardamos la tarea que acabamos de crear
 		By boton = By.id("form-principal:botonGuardar");
 		driver.findElement(boton).click();
@@ -674,18 +682,23 @@ public class PlantillaSDI2_Tests1617 {
 		WebElement planned = driver.findElement(By.id("form-principal:planned_input"));
 		planned.clear();
 		planned.click();
-		planned.sendKeys(DateUtil.today().toString());
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		Date date = new Date();
+		planned.sendKeys(String.valueOf(dateFormat.format(date)));
 		//Asignamos que la categoria sea la categoria1
-		
+		WebElement category = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[4]/td[2]/div[1]/label", 3).get(0);
+		category.click();
+		WebElement choosen = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/div[3]/div/ul/li[2]", 2).get(0);
+		choosen.click();
 		//Guardamos la tarea que acabamos de crear
 		By boton = By.id("form-principal:botonGuardar");
 		driver.findElement(boton).click();
 		Thread.sleep(1000);
-		List<Task> tareasInbox;
+		List<Task> tareasToday;
 		try {
-			tareasInbox = Factories.services.getTaskService().findInboxTasksByUserId((long) 1);
+			tareasToday = Factories.services.getTaskService().findTodayTasksByUserId((long) 1);
 			List<Long> aux = new ArrayList<Long>();
-			for(Task tarea : tareasInbox){
+			for(Task tarea : tareasToday){
 				aux.add(tarea.getId());
 			}
 			//Hacemos click en el boton de acceder a la ultima pagina para ir a la última tarea
@@ -693,34 +706,187 @@ public class PlantillaSDI2_Tests1617 {
 			pasoUltimaPagina.click();
 			Thread.sleep(1000);
 			//Comprobamos que el ultimo id es el de la tarea que acabamos de crear en la BD
-			SeleniumUtils.textoPresentePagina(driver, "Prueba 27");
+			SeleniumUtils.textoPresentePagina(driver, "Prueba 28");
 			SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[5]/td[4]", 2).get(0).getText().equals(aux.get(aux.size()-1));
 		} catch (BusinessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-//	//PR29: Crear una tarea con categoría categoria1 y fecha planeada posterior a Hoy y comprobar que se muestra en la lista Semana.
-//	@Test
-//    public void prueba29() {
-//		assertTrue(false);
-//    }
-//	//PR30: Editar el nombre, y categoría de una tarea (se le cambia a categoría1) de la lista Inbox y comprobar que las tres pseudolista se refresca correctamente.
-//	@Test
-//    public void prueba30() {
-//		assertTrue(false);
-//    }
-//	//PR31: Editar el nombre, y categoría (Se cambia a sin categoría) de una tarea de la lista Hoy y comprobar que las tres pseudolistas se refrescan correctamente.
-//	@Test
-//    public void prueba31() {
-//		assertTrue(false);
-//    }
-//	//PR32: Marcar una tarea como finalizada. Comprobar que desaparece de las tres pseudolistas.
-//	@Test
-//    public void prueba32() {
-//		assertTrue(false);
-//    }
-//	//PR33: Salir de sesión desde cuenta de administrador.
+	//PR29: Crear una tarea con categoría categoria1 y fecha planeada posterior a Hoy y comprobar que se muestra en la lista Semana.
+	@Test
+	public void prueba29() throws InterruptedException {
+		//Accedemos como usuario normal para poder visualizar la lista de tareas
+		new PO_LoginForm().rellenaFormulario(driver, "mary", "mary1234");
+		Thread.sleep(1000);
+		//Hacemos click en Añadir Tarea
+		WebElement addTask = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		addTask.click();
+		Thread.sleep(1000);
+		//Metemos el nuevo titulo a la tarea que vamos a crear
+		WebElement titulo = driver.findElement(By.id("form-principal:title"));
+		titulo.clear();
+		titulo.click();
+		titulo.sendKeys("Prueba 29");
+		//Ponemos fecha de planificacion
+		WebElement planned = driver.findElement(By.id("form-principal:planned_input"));
+		planned.clear();
+		planned.click();
+		WebElement nextFecha = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/div[2]/div/a[2]/span", 2).get(0);
+		nextFecha.click();
+		Thread.sleep(1000);
+		WebElement fecha = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/div[2]/table/tbody/tr[5]/td[3]/a", 2).get(0);
+		fecha.click();
+		//Asignamos que la categoria sea la categoria1
+		WebElement category = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[4]/td[2]/div[1]/label", 2).get(0);
+		category.click();
+		Thread.sleep(1000);
+		WebElement choosen = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/div[3]/div/ul/li[2]", 2).get(0);
+		choosen.click();
+		//Guardamos la tarea que acabamos de crear
+		By boton = By.id("form-principal:botonGuardar");
+		driver.findElement(boton).click();
+		Thread.sleep(1000);
+		List<Task> tareasWeek;
+		try {
+			tareasWeek = Factories.services.getTaskService().findWeekTasksByUserId((long) 1);
+			List<Long> aux = new ArrayList<Long>();
+			for(Task tarea : tareasWeek){
+				aux.add(tarea.getId());
+			}
+			//Hacemos click en el boton de acceder a la ultima pagina para ir a la última tarea
+			WebElement pasoUltimaPagina = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[1]/span[5]/span", 2).get(0);
+			pasoUltimaPagina.click();
+			Thread.sleep(1000);
+			//Comprobamos que el ultimo id es el de la tarea que acabamos de crear en la BD
+			SeleniumUtils.textoPresentePagina(driver, "Prueba 29");
+			SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[5]/td[4]", 2).get(0).getText().equals(aux.get(aux.size()-1));
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	//PR30: Editar el nombre, y categoría de una tarea (se le cambia a categoría1) de la lista Inbox y comprobar que las tres pseudolista se refresca correctamente.
+	@Test
+	public void prueba30() throws InterruptedException {
+		//Accedemos como usuario normal para poder visualizar la lista de tareas
+		new PO_LoginForm().rellenaFormulario(driver, "john", "john123");
+		Thread.sleep(1000);
+		//Hacemos click en Editar la Tarea 1
+		WebElement editTask = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[1]/td[5]/a", 2).get(0);
+		editTask.click();
+		Thread.sleep(1000);
+		//Metemos el nuevo titulo a la tarea que vamos a editar
+		WebElement titulo = driver.findElement(By.id("form-principal:title"));
+		titulo.clear();
+		titulo.click();
+		titulo.sendKeys("Prueba 30");
+		//Asignamos que la categoria sea la categoria1
+		WebElement category = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[4]/td[2]/div[1]/label", 2).get(0);
+		category.click();
+		Thread.sleep(1000);
+		WebElement choosen = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/div[3]/div/ul/li[2]", 2).get(0);
+		choosen.click();
+		//Guardamos la tarea que acabamos de crear
+		WebElement boton = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[5]/td/input", 2).get(0);
+		boton.click();
+		Thread.sleep(2000);
+		List<Task> tareasWeek;
+		try {
+			tareasWeek = Factories.services.getTaskService().findWeekTasksByUserId((long) 2);
+			List<Long> aux = new ArrayList<Long>();
+			for(Task tarea : tareasWeek){
+				aux.add(tarea.getId());
+			}
+			//Hacemos click en el boton de acceder a la ultima pagina para ir a la última tarea
+			WebElement pasoUltimaPagina = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[1]/span[5]/span", 2).get(0);
+			pasoUltimaPagina.click();
+			Thread.sleep(1000);
+			//Comprobamos que el ultimo id es el de la tarea que acabamos de crear en la BD
+			SeleniumUtils.textoPresentePagina(driver, "Prueba 30");
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	//PR31: Editar el nombre, y categoría (Se cambia a sin categoría) de una tarea de la lista Hoy y comprobar que las tres pseudolistas se refrescan correctamente.
+	@Test
+	public void prueba31() throws InterruptedException {
+		//Accedemos como usuario normal para poder visualizar la lista de tareas
+		new PO_LoginForm().rellenaFormulario(driver, "mary", "mary1234");
+		Thread.sleep(1000);
+		//Hacemos click en el submenú de today
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:menuListas", "form-cabecera:listToday");
+		Thread.sleep(1000);
+		//Hacemos click en Editar la Tarea 1
+		WebElement editTask = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[1]/td[6]/a", 2).get(0);
+		editTask.click();
+		Thread.sleep(1000);
+		//Metemos el nuevo titulo a la tarea que vamos a editar
+		WebElement titulo = driver.findElement(By.id("form-principal:title"));
+		titulo.clear();
+		titulo.click();
+		titulo.sendKeys("Prueba 31");
+		//Asignamos que la categoria sea la categoria1
+		WebElement category = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[4]/td[2]/div[1]/label", 2).get(0);
+		category.click();
+		Thread.sleep(1000);
+		WebElement choosen = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/div[3]/div/ul/li[2]", 2).get(0);
+		choosen.click();
+		//Guardamos la tarea que acabamos de crear
+		WebElement boton = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[5]/td/input", 2).get(0);
+		boton.click();
+		Thread.sleep(2000);
+		List<Task> tareasWeek;
+		try {
+			tareasWeek = Factories.services.getTaskService().findInboxTasksByUserId((long) 1);
+			List<Long> aux = new ArrayList<Long>();
+			for(Task tarea : tareasWeek){
+				aux.add(tarea.getId());
+			}
+			//Hacemos click en el boton de acceder a la ultima pagina para ir a la última tarea
+			WebElement pasoUltimaPagina = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[1]/span[5]/span", 2).get(0);
+			pasoUltimaPagina.click();
+			Thread.sleep(1000);
+			//Comprobamos que el ultimo id es el de la tarea que acabamos de crear en la BD
+			SeleniumUtils.textoPresentePagina(driver, "Prueba 31");
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	//PR32: Marcar una tarea como finalizada. Comprobar que desaparece de las tres pseudolistas.
+	@Test
+	public void prueba32() throws InterruptedException {
+		//Accedemos como usuario normal para poder visualizar la lista de tareas
+		new PO_LoginForm().rellenaFormulario(driver, "mary", "mary1234");
+		Thread.sleep(1000);
+		//Hacemos click en el submenú de today
+		SeleniumUtils.ClickSubopcionMenuHover(driver, "form-cabecera:menuListas", "form-cabecera:listToday");
+		Thread.sleep(1000);
+		//Hacemos click en Finalizar la Tarea 1
+		WebElement finTask = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[1]/td[7]/a", 2).get(0);
+		finTask.click();
+		Thread.sleep(1000);
+		List<Task> tareasWeek;
+		try {
+			tareasWeek = Factories.services.getTaskService().findTodayTasksByUserId((long) 1);
+			List<Long> aux = new ArrayList<Long>();
+			for(Task tarea : tareasWeek){
+				aux.add(tarea.getId());
+			}
+			//Hacemos click en el boton de acceder a la ultima pagina para ir a la última tarea
+			WebElement pasoUltimaPagina = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[1]/span[5]/span", 2).get(0);
+			pasoUltimaPagina.click();
+			Thread.sleep(1000);
+			//Comprobamos que el ultimo id es el de la tarea que acabamos de crear en la BD
+			SeleniumUtils.textoPresentePagina(driver, "Prueba 31");
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	//PR33: Salir de sesión desde cuenta de administrador.
 	@Test
     public void prueba33() {
 		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
