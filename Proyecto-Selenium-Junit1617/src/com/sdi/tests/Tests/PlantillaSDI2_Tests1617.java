@@ -610,11 +610,49 @@ public class PlantillaSDI2_Tests1617 {
 //    public void prueba26() {
 //		assertTrue(false);
 //    }
-//	//PR27: Crear una tarea sin categoría y comprobar que se muestra en la lista Inbox.
-//	@Test
-//    public void prueba27() {
-//		assertTrue(false);
-//    }
+	//PR27: Crear una tarea sin categoría y comprobar que se muestra en la lista Inbox.
+	@Test
+	public void prueba27() throws InterruptedException {
+		//Accedemos como usuario normal para poder visualizar la lista de tareas
+		new PO_LoginForm().rellenaFormulario(driver, "mary", "mary1234");
+		Thread.sleep(1000);
+		//Hacemos click en el submenú de week
+		WebElement addTask = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		addTask.click();
+		Thread.sleep(1000);
+		//Metemos el nuevo titulo a la tarea que vamos a crear
+		WebElement titulo = driver.findElement(By.id("form-principal:title"));
+		titulo.clear();
+		titulo.click();
+		titulo.sendKeys("Prueba 27");
+		//Ponemos fecha de planificacion
+		WebElement planned = driver.findElement(By.id("form-principal:planned_input"));
+		planned.clear();
+		planned.click();
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/div[2]/table/tbody/tr[5]/td[3]/a", 2).get(0).click();
+		//Guardamos la tarea que acabamos de crear
+		By boton = By.id("form-principal:botonGuardar");
+		driver.findElement(boton).click();
+		Thread.sleep(1000);
+		List<Task> tareasInbox;
+		try {
+			tareasInbox = Factories.services.getTaskService().findInboxTasksByUserId((long) 1);
+			List<Long> aux = new ArrayList<Long>();
+			for(Task tarea : tareasInbox){
+				aux.add(tarea.getId());
+			}
+			//Hacemos click en el boton de acceder a la ultima pagina para ir a la última tarea
+			WebElement pasoUltimaPagina = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[1]/span[5]/span", 2).get(0);
+			pasoUltimaPagina.click();
+			Thread.sleep(1000);
+			//Comprobamos que el ultimo id es el de la tarea que acabamos de crear en la BD
+			SeleniumUtils.textoPresentePagina(driver, "Prueba 27");
+			SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[5]/td[4]", 2).get(0).getText().equals(aux.get(aux.size()-1));
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 //	//PR28: Crear una tarea con categoría categoria1 y fecha planeada Hoy y comprobar que se muestra en la lista Hoy.
 //	@Test
 //    public void prueba28() {
