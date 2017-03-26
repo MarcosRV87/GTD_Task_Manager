@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -406,10 +407,12 @@ public class BeanTasks implements Serializable {
 		User user = (User) FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap().get("LOGGEDIN_USER");
 		try {
-			List<Category> aux = new ArrayList<Category>();
-			aux = ts.findCategoriesByUserId(user.getId());
-			for (Category cat : aux)
+			List<Category> categ = new ArrayList<Category>();
+			categ = ts.findCategoriesByUserId(user.getId());
+			for (Category cat : categ)
 				categories.put(cat.getName(), cat.getId());
+			Map<String, Long> catAux = new TreeMap<String, Long>(categories);
+			categories = catAux;
 			Log.info("Obtenidas categorias de usuario " + user.getLogin() + ".");
 		} catch (BusinessException e) {
 			Log.error("Error: Error obteniendo categorias de un usuario.");
