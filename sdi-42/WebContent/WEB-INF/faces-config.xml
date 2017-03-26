@@ -102,17 +102,17 @@
 		<navigation-case>
 			<from-action>#{tasks.addTarea}</from-action>
 			<from-outcome>exito</from-outcome>
-			<to-view-id>/addTaskForm.xhtml</to-view-id>
+			<to-view-id>/restricted/addTaskForm.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-action>#{tasks.selectTask}</from-action>
-			<from-outcome>exito</from-outcome>
+			<from-action>#{tasks.selectTask(vtask)}</from-action>
+			<from-outcome>edit</from-outcome>
 			<to-view-id>/restricted/editTaskForm.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-action>#{tasks.setFinishedInInbox(vtask)}</from-action>
 			<from-outcome>exito</from-outcome>
-			<to-view-id>/listWeekTasks.xhtml</to-view-id>
+			<to-view-id>/restricted/principalUser.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
@@ -132,8 +132,18 @@
 		</navigation-case>
 		<navigation-case>
 			<from-action>#{tasks.salva}</from-action>
-			<from-outcome>exito</from-outcome>
+			<from-outcome>inbox</from-outcome>
 			<to-view-id>/restricted/principalUser.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.salva}</from-action>
+			<from-outcome>today</from-outcome>
+			<to-view-id>/restricted/listTodayTasks.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.salva}</from-action>
+			<from-outcome>week</from-outcome>
+			<to-view-id>/restricted/listWeekTasks.xhtml</to-view-id>
 		</navigation-case>
 		<navigation-case>
 			<from-action>#{tasks.atras}</from-action>
@@ -174,12 +184,50 @@
 			<from-outcome>exito</from-outcome>
 			<to-view-id>/restricted/listTodayTasks.xhtml</to-view-id>
 		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.selectTask(vtask)}</from-action>
+			<from-outcome>edit</from-outcome>
+			<to-view-id>/restricted/editTaskForm.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.addTarea}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/restricted/addTaskForm.xhtml</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>/restricted/listWeekTasks.xhtml</from-view-id>
 		<navigation-case>
 			<from-action>#{tasks.setFinishedInWeek(vtask)}</from-action>
 			<from-outcome>exito</from-outcome>
+			<to-view-id>/restricted/listWeekTasks.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.selectTask(vtask)}</from-action>
+			<from-outcome>edit</from-outcome>
+			<to-view-id>/restricted/editTaskForm.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.addTarea}</from-action>
+			<from-outcome>exito</from-outcome>
+			<to-view-id>/restricted/addTaskForm.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>/restricted/editTaskForm.xhtml</from-view-id>
+		<navigation-case>
+			<from-action>#{tasks.salva}</from-action>
+			<from-outcome>inbox</from-outcome>
+			<to-view-id>/restricted/principalUser.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.salva}</from-action>
+			<from-outcome>today</from-outcome>
+			<to-view-id>/restricted/listTodayTasks.xhtml</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{tasks.salva}</from-action>
+			<from-outcome>week</from-outcome>
 			<to-view-id>/restricted/listWeekTasks.xhtml</to-view-id>
 		</navigation-case>
 	</navigation-rule>

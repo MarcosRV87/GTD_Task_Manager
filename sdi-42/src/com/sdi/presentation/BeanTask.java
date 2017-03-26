@@ -41,9 +41,7 @@ public class BeanTask extends Task implements Serializable {
 	// extraídos del archivo de propiedades correspondiente
 	public void iniciaTask(ActionEvent event) {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
-		Map<String, Object> sessionmap = FacesContext.getCurrentInstance()
-				.getExternalContext().getSessionMap();
-		User user = (User) sessionmap.get("LOGGEDIN_USER");
+		
 		ResourceBundle bundle = facesContext.getApplication()
 				.getResourceBundle(facesContext, "msgs");
 		setId(null);
@@ -53,7 +51,7 @@ public class BeanTask extends Task implements Serializable {
 //		setPlanned(bundle.getString("valorDefectoPlanned"));
 //		setFinished(bundle.getString("valorDefectoFinished"));
 //		setCategoryId();
-		setUserId(user.getId());
+//		setUserId(bundle.getString("valorDefectoUserId"));
 	}
 
 }

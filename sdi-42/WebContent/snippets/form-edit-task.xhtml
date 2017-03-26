@@ -15,7 +15,7 @@
   
   #{msgs.comentarios} 
   <h:panelGroup>
-			<p:inputText value="#{task.comments}" required="true"
+			<p:inputText value="#{task.comments}" 
 				id="comments">
 			</p:inputText>
 			<p:message for="comments" />
@@ -30,7 +30,7 @@
   #{msgs.categoria}
   <h:panelGroup>
 			<p:inputText
-				id="category">
+				id="category" value="#{task.categoryId}">
 			</p:inputText>
 			<p:message for="category" />
 		</h:panelGroup>

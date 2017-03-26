@@ -137,6 +137,7 @@ public class BeanTasks implements Serializable {
 	}
 
 	public String salva() {
+		String resultado = "";
 		TaskService service;
 		Map<String, Object> sessionmap = FacesContext.getCurrentInstance()
 				.getExternalContext().getSessionMap();
@@ -148,14 +149,39 @@ public class BeanTasks implements Serializable {
 			// Salvamos o actualizamos el task segun sea una operacion de alta
 			// o de edici��n
 			if (task.getId() == null) {
+				task.setUserId(user.getId());
 				service.createTask(task);
+				if(task.getCategoryId() == null){
+					tasks = service.findInboxTasksByUserId(user.getId());
+					resultado = "inbox";
+				}
+				if(task.getCategoryId() != null && (task.getPlanned().compareTo(DateUtil.today()) == 0)){
+					tasks = service.findTodayTasksByUserId(user.getId());
+					resultado = "today";
+				}
+				if(task.getCategoryId() != null && (task.getPlanned().compareTo(DateUtil.today()) > 0)){
+					tasks = service.findWeekTasksByUserId(user.getId());
+					resultado = "week";
+				}
 			} else {
 				service.updateTask(task);
+				if(task.getCategoryId() == null){
+					tasks = service.findInboxTasksByUserId(user.getId());
+					resultado = "inbox";
+				}
+				if(task.getCategoryId() != null && (task.getPlanned().compareTo(DateUtil.today()) == 0)){
+					tasks = service.findTodayTasksByUserId(user.getId());
+					resultado = "today";
+				}
+				if(task.getCategoryId() != null && (task.getPlanned().compareTo(DateUtil.today()) > 0)){
+					tasks = service.findWeekTasksByUserId(user.getId());
+					resultado = "week";
+				}
 			}
 			// Actualizamos el javabean de tasks inyectado en la tabla
 			// Mismo que antes, hay que obtener el user de la task
-			tasks = service.findInboxTasksByUserId(user.getId());
-			return "exito"; // Nos vamos a la vista de listado.
+			
+			return resultado; // Nos vamos a la vista de listado.
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -287,7 +313,7 @@ public class BeanTasks implements Serializable {
 
 	public String selectTask(Task task) {
 		this.task.setTask(task);
-		return "exito";
+		return "edit";
 	}
 
 	public boolean isDelayed(Task task) {
@@ -328,7 +354,6 @@ public class BeanTasks implements Serializable {
 			tasks = ts.findTodayTasksByUserId(user.getId());
 			return "exito";
 		} catch (BusinessException e) {
-			// TODO Auto-generated catch block
 			Log.error("Error: Error marcando tarea como finalizada.");
 			return "fracaso";
 		}

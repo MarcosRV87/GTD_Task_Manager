@@ -24,12 +24,12 @@
   #{msgs.planificada}
   <h:panelGroup>
 			<p:outputLabel for="planned" />
-        <p:calendar id="planned" value="#{task.planned}" />
+        <p:calendar id="planned" value="#{task.planned}" required="true"/>
 		</h:panelGroup>  
   
   #{msgs.categoria}
   <h:panelGroup>
-			<p:inputText
+			<p:inputText value="#{task.categoryId}"
 				id="category">
 			</p:inputText>
 			<p:message for="category" />
