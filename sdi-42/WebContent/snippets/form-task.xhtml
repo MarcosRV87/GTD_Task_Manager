@@ -37,8 +37,10 @@
 			</p:selectOneMenu>
 			<p:message for="category" />
 		</h:panelGroup>
-		<h:commandButton value="#{msgs.botonSalvar}" action="#{tasks.salva}"
-			update="Grid" process="@form">
+
+		<h:commandButton value="#{msgs.botonSalvar}" id="botonGuardar"
+			action="#{tasks.salva}" update="Grid" process="@form">
+
 		</h:commandButton>
 	</p:panelGrid>
 </ui:composition>
