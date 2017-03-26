@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxBinary;
@@ -21,6 +22,7 @@ import com.sdi.tests.utils.SeleniumUtils;
 import com.sdi.business.exception.BusinessException;
 import com.sdi.business.impl.SimpleServicesFactory;
 import com.sdi.dto.User;
+import com.sdi.dto.types.UserStatus;
 import com.sdi.infrastructure.Factories;
 
 //Ordenamos las pruebas por el nombre del método
@@ -61,9 +63,12 @@ public class PlantillaSDI2_Tests1617 {
 	//ADMINISTRADOR
 	//PR01: Autentificar correctamente al administrador.
 	@Test
-    public void prueba01() {
+    public void prueba01() throws InterruptedException {
 		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
-		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		Thread.sleep(1000);
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0).getText().equals("Listar Usuarios");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2);
+		SeleniumUtils.textoPresentePagina(driver, "Bienvenido a tu Gestor de Usuarios, admin!");
     }
 	//PR02: Fallo en la autenticación del administrador por introducir mal el login.
 	@Test
@@ -91,7 +96,7 @@ public class PlantillaSDI2_Tests1617 {
 		//Accedemos al listado de usuarios
 		WebElement listaUsers = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
 		listaUsers.click();
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 		
 		try {
 			List<User> users = Factories.services.getUserService().findAll();
@@ -187,21 +192,91 @@ public class PlantillaSDI2_Tests1617 {
 		Thread.sleep(1000);
 		SeleniumUtils.textoPresentePagina(driver, "Bienvenido a tu Gestor de Tareas, john!");
     }
-//	//PR08: Ordenar por Login
-//	@Test
-//    public void prueba08() {
-//		assertTrue(false);
-//    }
-//	//PR09: Ordenar por Email
-//	@Test
-//    public void prueba09() {
-//		assertTrue(false);
-//    }
-//	//PR10: Ordenar por Status
-//	@Test
-//    public void prueba10() {
-//		assertTrue(false);
-//    }
+	//PR08: Ordenar por Login
+	@Test
+	public void prueba08() throws InterruptedException {
+		//Accedemos como admin
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
+		WebElement listaUsers = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		listaUsers.click();
+		Thread.sleep(1000);
+		//Comprobamos que existe el boton de login para poder clickarlo
+		WebElement ordenUser = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[3]/table/thead/tr/th[3]/span[1]", 2).get(0);
+		ordenUser.click();
+		//Creo lista de los logins
+		try {
+			List<User> users = Factories.services.getUserService().findAll();
+			List<String> aux = new ArrayList<String>();
+			for(User user : users){
+				aux.add(user.getLogin());
+			}
+			java.util.Collections.sort(aux);
+			SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[3]/table/tbody/tr[1]/td[3]", 2).get(0).getText().equals(aux.get(0));
+			SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[3]/table/tbody/tr[8]/td[3]", 2).get(0).getText().equals(aux.get(aux.size()-1));
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	//PR09: Ordenar por Email
+	@Test
+	public void prueba09() throws InterruptedException {
+		//Accedemos como admin
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
+		WebElement listaUsers = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		listaUsers.click();
+		Thread.sleep(1000);
+		//Comprobamos que existe el boton de login para poder clickarlo
+		WebElement ordenUser = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[3]/table/thead/tr/th[3]/span[1]", 2).get(0);
+		ordenUser.click();
+		//Creo lista de los logins
+		try {
+			List<User> users = Factories.services.getUserService().findAll();
+			List<String> aux = new ArrayList<String>();
+			for(User user : users){
+				aux.add(user.getEmail());
+			}
+			java.util.Collections.sort(aux);
+			SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[3]/table/tbody/tr[1]/td[2]", 2).get(0).getText().equals(aux.get(0));
+			SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[3]/table/tbody/tr[8]/td[2]", 2).get(0).getText().equals(aux.get(aux.size()-1));
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	//PR10: Ordenar por Status
+	@Test
+	public void prueba10() throws InterruptedException {
+		//Accedemos como admin
+		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2);
+		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
+		WebElement listaUsers = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
+		listaUsers.click();
+		Thread.sleep(1000);
+		//Comprobamos que existe el boton de login para poder clickarlo
+		WebElement ordenUser = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[3]/table/thead/tr/th[3]/span[1]", 2).get(0);
+		ordenUser.click();
+		//Creo lista de los logins
+		try {
+			List<User> users = Factories.services.getUserService().findAll();
+			List<UserStatus> aux = new ArrayList<UserStatus>();
+			for(User user : users){
+				aux.add(user.getStatus());
+			}
+			java.util.Collections.sort(aux);
+			SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[3]/table/tbody/tr[1]/td[4]", 2).get(0).getText().equals(aux.get(0));
+			SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[3]/table/tbody/tr[8]/td[4]", 2).get(0).getText().equals(aux.get(aux.size()-1));
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	//PR11: Borrar  una cuenta de usuario normal y datos relacionados.
 	@Test
     public void prueba11() throws InterruptedException {
