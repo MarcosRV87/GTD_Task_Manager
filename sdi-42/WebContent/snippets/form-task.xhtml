@@ -7,16 +7,14 @@
   #{msgs.titulo} 
   <h:panelGroup>
 			<p:inputText value="#{task.title}" required="true"
-				requiredMessage="#{msgs.formAlta_login_requiredMessage}"
-				id="title">
+				requiredMessage="#{msgs.formAlta_login_requiredMessage}" id="title">
 			</p:inputText>
 			<p:message for="title" />
 		</h:panelGroup>
   
   #{msgs.comentarios} 
   <h:panelGroup>
-			<p:inputText value="#{task.comments}"
-				id="comments">
+			<p:inputText value="#{task.comments}" id="comments">
 			</p:inputText>
 			<p:message for="comments" />
 		</h:panelGroup>
@@ -24,18 +22,23 @@
   #{msgs.planificada}
   <h:panelGroup>
 			<p:outputLabel for="planned" />
-        <p:calendar id="planned" value="#{task.planned}" required="true"/>
+			<p:calendar id="planned" value="#{task.planned}" required="true" />
 		</h:panelGroup>  
   
   #{msgs.categoria}
   <h:panelGroup>
-			<p:inputText value="#{task.categoryId}"
+			<!-- <p:inputText value="#{task.categoryId}"
 				id="category">
-			</p:inputText>
+			</p:inputText> -->
+			<p:selectOneMenu id="category" value="#{task.categoryId}"
+				style="width:125px">
+				<f:selectItem itemLabel="#{msgs.withoutCategory}" itemValue="" />
+				<f:selectItems value="#{tasks.categories}" />
+			</p:selectOneMenu>
 			<p:message for="category" />
 		</h:panelGroup>
-		<h:commandButton value="#{msgs.botonSalvar}"
-			action="#{tasks.salva}" update="Grid" process="@form">
+		<h:commandButton value="#{msgs.botonSalvar}" action="#{tasks.salva}"
+			update="Grid" process="@form">
 		</h:commandButton>
 	</p:panelGrid>
 </ui:composition>

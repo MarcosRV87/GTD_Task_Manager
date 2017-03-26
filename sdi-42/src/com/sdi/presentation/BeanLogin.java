@@ -130,6 +130,7 @@ public class BeanLogin implements Serializable {
 						List<Task> auxTasks = new ArrayList<Task>();
 						auxTasks = ts.findInboxTasksByUserId(user.getId());
 						tasks.setTasks(auxTasks);
+						tasks.obtainCategories();
 						resultado = "client";
 					}
 					Log.info("El usuario [%s] ha iniciado sesión",

@@ -1,6 +1,8 @@
 package com.sdi.presentation;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -12,13 +14,13 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
 
 import alb.util.date.DateUtil;
 import alb.util.log.Log;
 
 import com.sdi.business.TaskService;
 import com.sdi.business.exception.BusinessException;
+import com.sdi.dto.Category;
 import com.sdi.dto.Task;
 import com.sdi.dto.User;
 import com.sdi.infrastructure.Factories;
@@ -62,6 +64,16 @@ public class BeanTasks implements Serializable {
 		this.tasks = tasks;
 	}
 
+	private Map<String,Long> categories = new HashMap<String,Long>();
+
+	public Map<String,Long> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Map<String,Long> categories) {
+		this.categories = categories;
+	}
+
 	public void iniciaTask(ActionEvent event) {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		// Obtenemos el archivo de propiedades correspondiente al idioma que
@@ -97,25 +109,6 @@ public class BeanTasks implements Serializable {
 
 	}
 
-	// public String baja(Task task) {
-	// TaskService service;
-	// try {
-	// // Acceso a la implementacion de la capa de negocio
-	// // a trav��s de la factor��a
-	// service =
-	// // Aliminamos el task seleccionado en la tabla
-	// service.deleteTask(task.getId());
-	// // Actualizamos el javabean de tasks inyectado en la tabla.
-	// tasks = (Task[]) service.findAll().toArray(new Task[0]);
-	// return "exito"; // Nos vamos a la vista de listado.
-	//
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// return "error"; // Nos vamos a la vista de error
-	// }
-	//
-	// }
-
 	public String edit() {
 		TaskService service;
 		try {
@@ -146,41 +139,46 @@ public class BeanTasks implements Serializable {
 			// a trav��s de la factor��a
 			User user = (User) sessionmap.get("LOGGEDIN_USER");
 			service = Factories.services.getTaskService();
+
 			// Salvamos o actualizamos el task segun sea una operacion de alta
 			// o de edici��n
 			if (task.getId() == null) {
 				task.setUserId(user.getId());
 				service.createTask(task);
-				if(task.getCategoryId() == null){
+				if (task.getCategoryId() == null) {
 					tasks = service.findInboxTasksByUserId(user.getId());
 					resultado = "inbox";
 				}
-				if(task.getCategoryId() != null && (task.getPlanned().compareTo(DateUtil.today()) == 0)){
+				if (task.getCategoryId() != null
+						&& (task.getPlanned().compareTo(DateUtil.today()) == 0)) {
 					tasks = service.findTodayTasksByUserId(user.getId());
 					resultado = "today";
 				}
-				if(task.getCategoryId() != null && (task.getPlanned().compareTo(DateUtil.today()) > 0)){
+				if (task.getCategoryId() != null
+						&& (task.getPlanned().compareTo(DateUtil.today()) > 0)) {
 					tasks = service.findWeekTasksByUserId(user.getId());
 					resultado = "week";
 				}
 			} else {
 				service.updateTask(task);
-				if(task.getCategoryId() == null){
+				if (task.getCategoryId() == null) {
 					tasks = service.findInboxTasksByUserId(user.getId());
 					resultado = "inbox";
 				}
-				if(task.getCategoryId() != null && (task.getPlanned().compareTo(DateUtil.today()) == 0)){
+				if (task.getCategoryId() != null
+						&& (task.getPlanned().compareTo(DateUtil.today()) == 0)) {
 					tasks = service.findTodayTasksByUserId(user.getId());
 					resultado = "today";
 				}
-				if(task.getCategoryId() != null && (task.getPlanned().compareTo(DateUtil.today()) > 0)){
+				if (task.getCategoryId() != null
+						&& (task.getPlanned().compareTo(DateUtil.today()) > 0)) {
 					tasks = service.findWeekTasksByUserId(user.getId());
 					resultado = "week";
 				}
 			}
 			// Actualizamos el javabean de tasks inyectado en la tabla
 			// Mismo que antes, hay que obtener el user de la task
-			
+
 			return resultado; // Nos vamos a la vista de listado.
 
 		} catch (Exception e) {
@@ -194,6 +192,7 @@ public class BeanTasks implements Serializable {
 	public String addTarea() {
 		String resultado = "";
 		FacesContext fc = FacesContext.getCurrentInstance();
+
 		// Si no existe un usuario en sesión
 		if (fc.getExternalContext().getSessionMap().get("LOGGEDIN_USER") != null) {
 			Log.info("Accediendo a añadir una tarea");
@@ -202,7 +201,7 @@ public class BeanTasks implements Serializable {
 		return resultado;
 	}
 
-	//TODO Quitar este método de aquí que me ta dando tirria... y el de encima (addTarea) también
+	// TODO Quitar este método de aquí que me ta dando tirria...
 	public String atras() {
 		String resultado = "";
 		FacesContext fc = FacesContext.getCurrentInstance();
@@ -317,7 +316,8 @@ public class BeanTasks implements Serializable {
 	}
 
 	public boolean isDelayed(Task task) {
-		if(task.getPlanned()==null)
+		// TODO Quitar esto
+		if (task.getPlanned() == null)
 			return false;
 		if (task.getPlanned().compareTo(DateUtil.today()) < 0)
 			return true;
@@ -350,7 +350,7 @@ public class BeanTasks implements Serializable {
 		try {
 			User user = (User) FacesContext.getCurrentInstance()
 					.getExternalContext().getSessionMap().get("LOGGEDIN_USER");
-			
+
 			ts.markTaskAsFinished(task.getId());
 			Log.info("Tarea marcada como finalizada.");
 			tasks = ts.findTodayTasksByUserId(user.getId());
@@ -373,9 +373,26 @@ public class BeanTasks implements Serializable {
 			tasks = ts.findWeekTasksByUserId(user.getId());
 			return "exito";
 		} catch (BusinessException e) {
-			// TODO Auto-generated catch block
 			Log.error("Error: Error marcando tarea como finalizada.");
 			return "fracaso";
+		}
+	}
+
+	public void obtainCategories() {
+		TaskService ts;
+		ts = Factories.services.getTaskService();
+		User user = (User) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get("LOGGEDIN_USER");
+		try {
+			List<Category> aux = new ArrayList<Category>();
+			aux = ts.findCategoriesByUserId(user.getId());
+			for (Category cat : aux)
+				categories.put(cat.getName(), cat.getId());
+//				if (!categories.contains(cat.getId()))
+//					categories.add(cat.getId()); // String.valueOf()
+			Log.info("Obtenidas categorias de usuario " + user.getLogin() + ".");
+		} catch (BusinessException e) {
+			Log.error("Error: Error obteniendo categorias de un usuario.");
 		}
 	}
 

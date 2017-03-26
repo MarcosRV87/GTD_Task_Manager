@@ -29,9 +29,11 @@
   
   #{msgs.categoria}
   <h:panelGroup>
-			<p:inputText
-				id="category" value="#{task.categoryId}">
-			</p:inputText>
+			<p:selectOneMenu id="category" value="#{task.categoryId}"
+				style="width:125px">
+				<f:selectItem itemLabel="#{msgs.withoutCategory}" itemValue="" />
+				<f:selectItems value="#{tasks.categories}" />
+			</p:selectOneMenu>
 			<p:message for="category" />
 		</h:panelGroup>
 		<h:commandButton value="#{msgs.botonSalvar}"
