@@ -25,15 +25,18 @@
 					</th>
 				</tr>
 			</table>
-			
+
 			<ui:insert name="menubar">#{msgs.tituloDefectoMenuBar}</ui:insert>
 
 		</h:form>
-
-		<ui:insert name="cuerpo">#{msgs.tituloDefectoCuerpo}</ui:insert>
+		<div id="div-cuerpo" class="ui-grid ui-grid-responsive">
+			<h:form id="form-messages">
+				<p:messages id="messages" showDetail="false" closable="true" />
+			</h:form>
+			<ui:insert name="cuerpo">#{msgs.tituloDefectoCuerpo}</ui:insert>
+		</div>
 
 		<ui:insert name="pie">#{msgs.tituloPie}</ui:insert>
-
 	</h:body>
 </f:view>
 </html>

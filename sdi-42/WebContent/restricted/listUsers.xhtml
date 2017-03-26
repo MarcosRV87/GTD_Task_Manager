@@ -38,16 +38,16 @@
 					<f:facet name="header">#{msgs.headerModificarStatus}</f:facet>
 					<p:commandLink value="#{msgs.deshabilitar}"
 						action="#{users.switchStatus(vuser)}" type="submit"
-						rendered="#{vuser.status eq 'ENABLED'}" update="form-principal"></p:commandLink>
+						rendered="#{vuser.status eq 'ENABLED'}" update="form-principal,form-messages:messages"></p:commandLink>
 					<p:commandLink value="#{msgs.habilitar}"
 						action="#{users.switchStatus(vuser)}" type="submit"
-						rendered="#{vuser.status eq 'DISABLED'}" update="form-principal"></p:commandLink>
+						rendered="#{vuser.status eq 'DISABLED'}" update="form-principal,form-messages:messages"></p:commandLink>
 				</p:column>
 				<p:column>
 					<f:facet name="header">#{msgs.headerEliminar}</f:facet>
 					<p:commandLink value="#{msgs.headerEliminar}"
 						action="#{users.delete(vuser)}" type="submit"
-						update="form-principal"></p:commandLink>
+						update="form-principal,form-messages:messages"></p:commandLink>
 				</p:column>
 			</p:dataTable>
 		</h:form>

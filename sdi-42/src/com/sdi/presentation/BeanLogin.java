@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -30,7 +29,7 @@ public class BeanLogin implements Serializable {
 	private static final long serialVersionUID = 6L;
 
 	private String resultado = "";
-	
+
 	public String getResultado() {
 		return resultado;
 	}
@@ -39,14 +38,14 @@ public class BeanLogin implements Serializable {
 		this.resultado = resultado;
 	}
 
-	@ManagedProperty(value="#{tasks}")
+	@ManagedProperty(value = "#{tasks}")
 	private BeanTasks tasks;
-	
-	public BeanTasks getTasks(){
+
+	public BeanTasks getTasks() {
 		return this.tasks;
 	}
-	
-	public void setTasks(BeanTasks tasks){
+
+	public void setTasks(BeanTasks tasks) {
 		this.tasks = tasks;
 	}
 
@@ -65,18 +64,13 @@ public class BeanLogin implements Serializable {
 		System.out.println("BeanLogin - PostConstruct");
 		Log.info("BeanLogin - PostConstruct");
 		Log.setLogLevel(3);
-		
-//		beanUsers = (BeanUsers) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("users");
-//		if(beanUsers == null){
-//			Log.info("BeanUsers - No existía.");
-//			beanUsers = new BeanUsers();
-//			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("users", beanUsers);
-//		}
-		
-		tasks = (BeanTasks) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(new String("tasks"));
-		if(tasks == null){
+
+		tasks = (BeanTasks) FacesContext.getCurrentInstance()
+				.getExternalContext().getSessionMap().get(new String("tasks"));
+		if (tasks == null) {
 			tasks = new BeanTasks();
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("tasks", tasks);
+			FacesContext.getCurrentInstance().getExternalContext()
+					.getSessionMap().put("tasks", tasks);
 		}
 	}
 
@@ -89,13 +83,17 @@ public class BeanLogin implements Serializable {
 		user.setLogin("");
 		user.setPassword("");
 		user.setEmail("");
-		// TODO Faltan atributos del usuario, comprobar BBDD.
 	}
 
 	public String cerrarSesion() {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(true);
 		removeUserInSession(session);
+		FacesContext fc = FacesContext.getCurrentInstance();
+		Log.info("Se ha cerrado la sesión.");
+		fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+				"Se ha cerrado la sesión.",
+				"Se ha cerrado la sesión."));
 		return "exito";
 	}
 
@@ -124,9 +122,9 @@ public class BeanLogin implements Serializable {
 				if (aux != null) {
 					user = aux;
 					putUserInSession();
-					if(user.getIsAdmin()){
+					if (user.getIsAdmin()) {
 						resultado = "admin";
-					}else{
+					} else {
 						List<Task> auxTasks = new ArrayList<Task>();
 						auxTasks = ts.findInboxTasksByUserId(user.getId());
 						tasks.setTasks(auxTasks);
@@ -135,7 +133,10 @@ public class BeanLogin implements Serializable {
 					}
 					Log.info("El usuario [%s] ha iniciado sesión",
 							user.getLogin());
-					// TODO Cargar las categorías y las tareas del usuario.
+					fc.addMessage(null, new FacesMessage(
+							FacesMessage.SEVERITY_INFO, "Log-in correcto",
+							"Log-in correcto"));
+
 				} else {
 					inicializarUsuario();
 					resultado = "fracaso";

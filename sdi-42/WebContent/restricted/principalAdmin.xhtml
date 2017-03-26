@@ -12,7 +12,7 @@
 	<ui:define name="menubar">
 		<p:menubar id="menubar">
 			<p:menuitem value="#{msgs.listarUsuarios}" action="#{users.listado}" />
-			<p:menuitem value="#{msgs.resetDatabase}" action="#{users.resetDatabase}" />
+			<p:menuitem value="#{msgs.resetDatabase}" action="#{users.resetDatabase}" update="form-messages:messages"/>
 			<ui:include src="/snippets/options.xhtml" />
 		</p:menubar>
 	</ui:define>

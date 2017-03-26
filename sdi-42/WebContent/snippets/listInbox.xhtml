@@ -7,16 +7,6 @@
 		<p:dataTable id="tasksTable" var="vtask" value="#{tasks.tasks}"
 			paginator="true" rows="8">
 
-			<!-- <f:facet name="header">
-			<h:outputText value="#{msgs.labelListadoUsuarios}" />
-			<div align="right">
-				<p:outputPanel>
-					<h:outputText value="#{msgs.labelFiltro}:" />
-					<p:inputText id="globalFilter" onkeyup="PF('tasksTable').filter()"
-						style="width:150px" placeholder="#{msgs.labelPalabraClave}" />
-				</p:outputPanel>
-			</div>
-		</f:facet> -->
 			<p:column>
 				<f:facet name="header">#{msgs.headerUserId}</f:facet>#{vtask.id}</p:column>
 			<p:column filterBy="#{vtask.title}">

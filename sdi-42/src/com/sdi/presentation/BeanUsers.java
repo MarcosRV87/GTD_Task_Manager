@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -62,10 +63,10 @@ public class BeanUsers implements Serializable {
 				.getResourceBundle(facesContext, "msgs");
 		user.setId(null);
 		user.setEmail(bundle.getString("valorDefectoCorreo"));
-//		user.setIsAdmin(bundle.getString("valorDefectoUserAdmin"));
+		// user.setIsAdmin(bundle.getString("valorDefectoUserAdmin"));
 		user.setLogin(bundle.getString("valorDefectoLogin"));
 		user.setPassword(bundle.getString("valorDefectoPassword"));
-//		user.setStatus(bundle.getString("valorDefectoStatus"));
+		// user.setStatus(bundle.getString("valorDefectoStatus"));
 	}
 
 	public String listado() {
@@ -83,25 +84,6 @@ public class BeanUsers implements Serializable {
 
 	}
 
-//	public String baja(User user) {
-//		UserService service;
-//		try {
-//			// Acceso a la implementacion de la capa de negocio
-//			// a trav��s de la factor��a
-//			service = 
-//			// Aliminamos el user seleccionado en la tabla
-//			service.deleteUser(user.getId());
-//			// Actualizamos el javabean de users inyectado en la tabla.
-//			users = (User[]) service.findAll().toArray(new User[0]);
-//			return "exito"; // Nos vamos a la vista de listado.
-//
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return "error"; // Nos vamos a la vista de error
-//		}
-//
-//	}
-
 	public String edit() {
 		UserService service;
 		try {
@@ -111,7 +93,6 @@ public class BeanUsers implements Serializable {
 			// Recargamos el user seleccionado en la tabla de la base de datos
 			// por si hubiera cambios.
 
-			// TODO PREGUNTAR SI ESTO ESTÁ CORRECTO
 			user = (BeanUser) service.findUserById(user.getId());
 			return "exito"; // Nos vamos a la vista de Edición.
 
@@ -123,6 +104,7 @@ public class BeanUsers implements Serializable {
 	}
 
 	public String salva() {
+		FacesContext fc = FacesContext.getCurrentInstance();
 		UserService service;
 		try {
 			// Acceso a la implementacion de la capa de negocio
@@ -132,10 +114,24 @@ public class BeanUsers implements Serializable {
 			// o de edici��n
 			User aux = service.findUserByName(user.getLogin());
 			if (user.getId() == null) {
-				if((aux==null) && (user.getPassword().equals(user.getRepassword())))
+				if ((aux == null)
+						&& (user.getPassword().equals(user.getRepassword()))) {
 					service.registerUser(user);
-				else
+					Log.info("Registro satisfactorio.");
+					fc.addMessage(null, new FacesMessage(
+							FacesMessage.SEVERITY_INFO,
+							"Te has registrado satisfactoriamente.",
+							"Te has registrado satisfactoriamente."));
+				} else {
+					Log.info("Las contraseñas han de ser iguales");
+					fc.addMessage(
+							null,
+							new FacesMessage(
+									FacesMessage.SEVERITY_INFO,
+									"Las contraseñas han de ser iguales, inténtelo de nuevo.",
+									"Las contraseñas han de ser iguales, inténtelo de nuevo."));
 					return "fracaso";
+				}
 			} else {
 				service.updateUserDetails(user);
 			}
@@ -149,8 +145,10 @@ public class BeanUsers implements Serializable {
 		}
 
 	}
-	
+
 	public String switchStatus(User user) {
+		FacesContext fc = FacesContext.getCurrentInstance();
+		
 		UserService us;
 		AdminService as;
 		try {
@@ -158,11 +156,19 @@ public class BeanUsers implements Serializable {
 			// a trav��s de la factor��a
 			us = Factories.services.getUserService();
 			as = Factories.services.getAdminService();
-			// Aliminamos el user seleccionado en la tabla
+			// Eliminamos el user seleccionado en la tabla
 			if (user.getStatus() == UserStatus.DISABLED) {
 				as.enableUser(user.getId());
+				Log.info("Se ha habilitado el usuario con ID [%d]", user.getId());
+				fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Se ha habilitado un usuario.",
+						"Se ha habilitado un usuario."));
 			} else {
 				as.disableUser(user.getId());
+				Log.info("Se ha deshabilitado el usuario con ID [%d]", user.getId());
+				fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+						"Se ha deshabilitado un usuario.",
+						"Se ha deshabilitado un usuario."));
 			}
 			// Actualizamos el javabean de users inyectado en la tabla.
 			users = us.findAll();
@@ -185,6 +191,11 @@ public class BeanUsers implements Serializable {
 			as = Factories.services.getAdminService();
 			// Aliminamos el user seleccionado en la tabla
 			as.deepDeleteUser(user.getId());
+			FacesContext fc = FacesContext.getCurrentInstance();
+			Log.info("Se ha borrado el usuario [%d].",user.getId());
+			fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Se ha borrado el usuario.",
+					"Se ha borrado el usuario."));
 			// Actualizamos el javabean de users inyectado en la tabla.
 			users = us.findAll();
 			return "exito"; // Nos vamos a la vista de listado.
@@ -214,11 +225,15 @@ public class BeanUsers implements Serializable {
 	public void end() {
 		System.out.println("BeanUsers - PreDestroy");
 	}
-	
-	public String resetDatabase(){
+
+	public String resetDatabase() {
+		FacesContext fc = FacesContext.getCurrentInstance();
 		AdminService as;
 		as = Factories.services.getAdminService();
-		
+		Log.info("La base de datos ha sido reseteada.");
+		fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+				"La base de datos ha sido reseteada.",
+				"La base de datos ha sido reseteada."));
 		as.resetDatabase();
 		return "exito";
 	}

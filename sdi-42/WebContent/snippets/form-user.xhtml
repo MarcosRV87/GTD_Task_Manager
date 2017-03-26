@@ -48,7 +48,7 @@
 			<p:message for="repassword" />
 		</h:panelGroup>
 		<h:commandButton value="#{msgs.botonSalvar}" id="botonGuardar"
-			action="#{users.salva}" update="Grid" process="@form">
+			action="#{users.salva}" update="Grid,form-messages:messages" process="@form">
 		</h:commandButton>
 	</p:panelGrid>
 </ui:composition>

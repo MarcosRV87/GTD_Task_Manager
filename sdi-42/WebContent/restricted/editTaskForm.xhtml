@@ -9,9 +9,15 @@
     #{msgs.tituloOperacionEdicion}
   </ui:define>
 
+	<ui:define name="menubar">
+		<p:menubar id="menubar">
+			<ui:include src="/snippets/listas.xhtml" />
+			<p:menuitem value="#{msgs.enlaceAtras}" action="#{tasks.atras}" />
+			<ui:include src="/snippets/options.xhtml" />
+		</p:menubar>
+	</ui:define>
+
 	<ui:define name="cuerpo">
-
-
 		<h:form id="form-principal">
 			<p:panel header="#{msgs.tituloOperacionEdicion}">
 				<ui:include src="/snippets/form-edit-task.xhtml" />

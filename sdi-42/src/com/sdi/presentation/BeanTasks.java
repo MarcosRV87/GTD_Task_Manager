@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -118,7 +119,6 @@ public class BeanTasks implements Serializable {
 			// Recargamos el task seleccionado en la tabla de la base de datos
 			// por si hubiera cambios.
 
-			// TODO PREGUNTAR SI ESTO ESTÁ CORRECTO
 			task = (BeanTask) service.findTaskById(task.getId());
 			return "exito"; // Nos vamos a la vista de Edición.
 
@@ -130,6 +130,8 @@ public class BeanTasks implements Serializable {
 	}
 
 	public String salva() {
+		FacesContext fc = FacesContext.getCurrentInstance();
+		
 		String resultado = "";
 		TaskService service;
 		Map<String, Object> sessionmap = FacesContext.getCurrentInstance()
@@ -159,6 +161,10 @@ public class BeanTasks implements Serializable {
 					tasks = service.findWeekTasksByUserId(user.getId());
 					resultado = "week";
 				}
+				Log.info("Se ha añadido la tarea correctamente.");
+				fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Se ha añadido la tarea correctamente.",
+						"Se ha añadido la tarea correctamente."));
 			} else {
 				service.updateTask(task);
 				if (task.getCategoryId() == null) {
@@ -175,6 +181,10 @@ public class BeanTasks implements Serializable {
 					tasks = service.findWeekTasksByUserId(user.getId());
 					resultado = "week";
 				}
+				Log.info("Se ha modificado la tarea correctamente.");
+				fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+						"Se ha modificado la tarea correctamente.",
+						"Se ha modificado la tarea correctamente."));
 			}
 			// Actualizamos el javabean de tasks inyectado en la tabla
 			// Mismo que antes, hay que obtener el user de la task
@@ -201,7 +211,6 @@ public class BeanTasks implements Serializable {
 		return resultado;
 	}
 
-	// TODO Quitar este método de aquí que me ta dando tirria...
 	public String atras() {
 		String resultado = "";
 		FacesContext fc = FacesContext.getCurrentInstance();
@@ -326,6 +335,8 @@ public class BeanTasks implements Serializable {
 	}
 
 	public String setTaskAsFinishedInInbox(Task task) {
+		FacesContext fc = FacesContext.getCurrentInstance();
+		
 		TaskService ts;
 		ts = Factories.services.getTaskService();
 
@@ -333,7 +344,10 @@ public class BeanTasks implements Serializable {
 			User user = (User) FacesContext.getCurrentInstance()
 					.getExternalContext().getSessionMap().get("LOGGEDIN_USER");
 			ts.markTaskAsFinished(task.getId());
-			Log.info("Tarea marcada como finalizada.");
+			Log.info("Se ha finalizado la tarea.");
+			fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Se ha finalizado la tarea.",
+					"Se ha finalizado la tarea."));
 			tasks = ts.findInboxTasksByUserId(user.getId());
 			return "exito";
 		} catch (BusinessException e) {
@@ -344,6 +358,7 @@ public class BeanTasks implements Serializable {
 	}
 
 	public String setTaskAsFinishedInToday(Task task) {
+		FacesContext fc = FacesContext.getCurrentInstance();
 		TaskService ts;
 		ts = Factories.services.getTaskService();
 
@@ -352,7 +367,10 @@ public class BeanTasks implements Serializable {
 					.getExternalContext().getSessionMap().get("LOGGEDIN_USER");
 
 			ts.markTaskAsFinished(task.getId());
-			Log.info("Tarea marcada como finalizada.");
+			Log.info("Se ha finalizado la tarea.");
+			fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Se ha finalizado la tarea.",
+					"Se ha finalizado la tarea."));
 			tasks = ts.findTodayTasksByUserId(user.getId());
 			return "exito";
 		} catch (BusinessException e) {
@@ -362,6 +380,7 @@ public class BeanTasks implements Serializable {
 	}
 
 	public String setTaskAsFinishedInWeek(Task task) {
+		FacesContext fc = FacesContext.getCurrentInstance();
 		TaskService ts;
 		ts = Factories.services.getTaskService();
 
@@ -369,7 +388,10 @@ public class BeanTasks implements Serializable {
 			User user = (User) FacesContext.getCurrentInstance()
 					.getExternalContext().getSessionMap().get("LOGGEDIN_USER");
 			ts.markTaskAsFinished(task.getId());
-			Log.info("Tarea marcada como finalizada.");
+			Log.info("Se ha finalizado la tarea.");
+			fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Se ha finalizado la tarea.",
+					"Se ha finalizado la tarea."));
 			tasks = ts.findWeekTasksByUserId(user.getId());
 			return "exito";
 		} catch (BusinessException e) {
@@ -388,8 +410,6 @@ public class BeanTasks implements Serializable {
 			aux = ts.findCategoriesByUserId(user.getId());
 			for (Category cat : aux)
 				categories.put(cat.getName(), cat.getId());
-//				if (!categories.contains(cat.getId()))
-//					categories.add(cat.getId()); // String.valueOf()
 			Log.info("Obtenidas categorias de usuario " + user.getLogin() + ".");
 		} catch (BusinessException e) {
 			Log.error("Error: Error obteniendo categorias de un usuario.");
