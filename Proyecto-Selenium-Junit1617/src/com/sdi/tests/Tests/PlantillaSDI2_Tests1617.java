@@ -3,7 +3,6 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -20,17 +19,14 @@ import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
-import alb.util.date.DateUtil;
-
-import com.sdi.tests.pageobjects.PO_LoginForm;
-import com.sdi.tests.pageobjects.PO_RegisterForm;
-import com.sdi.tests.utils.SeleniumUtils;
 import com.sdi.business.exception.BusinessException;
-import com.sdi.business.impl.SimpleServicesFactory;
 import com.sdi.dto.Task;
 import com.sdi.dto.User;
 import com.sdi.dto.types.UserStatus;
 import com.sdi.infrastructure.Factories;
+import com.sdi.tests.pageobjects.PO_LoginForm;
+import com.sdi.tests.pageobjects.PO_RegisterForm;
+import com.sdi.tests.utils.SeleniumUtils;
 
 //Ordenamos las pruebas por el nombre del método
 @FixMethodOrder(MethodSorters.NAME_ASCENDING) 
@@ -76,28 +72,33 @@ public class PlantillaSDI2_Tests1617 {
 		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0).getText().equals("Listar Usuarios");
 		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2);
 		SeleniumUtils.textoPresentePagina(driver, "Bienvenido a tu Gestor de Usuarios, admin!");
+		SeleniumUtils.textoPresentePagina(driver, "Log-in correcto");
     }
 	//PR02: Fallo en la autenticación del administrador por introducir mal el login.
 	@Test
-    public void prueba02() {
+    public void prueba02() throws InterruptedException {
 		new PO_LoginForm().rellenaFormulario(driver, "administrador", "admin1234");
-		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div/table/tbody/tr[1]/td[2]/input", 2);
+		Thread.sleep(1000);
+		SeleniumUtils.textoNoPresentePagina(driver, "Bienvenido a tu Gestor de Usuarios, admin!");
+		SeleniumUtils.textoPresentePagina(driver, "Credenciales inválidas");
     }
 	//PR03: Fallo en la autenticación del administrador por introducir mal la password.
 	@Test
-    public void prueba03() {
+    public void prueba03() throws InterruptedException {
 		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin123");
-		SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div/table/tbody/tr[1]/td[2]/input", 2);
-    }
-	//PR04: Probar que la base de datos contiene los datos insertados con conexión correcta a la base de datos.
-	@Test
-    public void prueba04() throws InterruptedException {
-		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
 		Thread.sleep(1000);
-		WebElement resetDB = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
-		resetDB.click();
-		
+		SeleniumUtils.textoNoPresentePagina(driver, "Bienvenido a tu Gestor de Usuarios, admin!");
+		SeleniumUtils.textoPresentePagina(driver, "Credenciales inválidas");
     }
+//	//PR04: Probar que la base de datos contiene los datos insertados con conexión correcta a la base de datos.
+//	@Test
+//    public void prueba04() throws InterruptedException {
+//		new PO_LoginForm().rellenaFormulario(driver, "admin", "admin1234");
+//		Thread.sleep(1000);
+//		WebElement resetDB = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+//		resetDB.click();
+//		
+//    }
 	//PR05: Visualizar correctamente la lista de usuarios normales. 
 	@Test
     public void prueba05() throws InterruptedException {
@@ -143,12 +144,12 @@ public class PlantillaSDI2_Tests1617 {
 		WebElement listaUsers = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
 		listaUsers.click();
 		//Ahora que visualizamos la lista de usuarios deshabilitamos a john
-		WebElement deshabJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[2]/td[5]/a", 3).get(0);
+		WebElement deshabJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/div[1]/form[2]/div/div[3]/table/tbody/tr[2]/td[5]/a", 3).get(0);
 		deshabJohn.click();
-		Thread.sleep(1000);
-		SeleniumUtils.textoPresentePagina(driver, "DISABLED");
+		Thread.sleep(2000);
+		SeleniumUtils.textoPresentePagina(driver, "Se ha deshabilitado un usuario.");
 		//Cerramos sesion con el admin e intentamos entrar con John
-		WebElement signOut = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		WebElement signOut = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form/div/ul/li[3]/a/span", 2).get(0);
 		signOut.click();
 		Thread.sleep(1000);
 		new PO_LoginForm().rellenaFormulario(driver, "john", "john123");
@@ -163,7 +164,7 @@ public class PlantillaSDI2_Tests1617 {
 		Thread.sleep(1000);
 		WebElement listaUsers2 = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
 		listaUsers2.click();
-		WebElement habJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[2]/td[5]/a", 3).get(0);
+		WebElement habJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/div[1]/form[2]/div/div[3]/table/tbody/tr[2]/td[5]/a", 3).get(0);
 		habJohn.click();
 		Thread.sleep(1000);
 		SeleniumUtils.textoNoPresentePagina(driver, "DISABLED");
@@ -176,12 +177,13 @@ public class PlantillaSDI2_Tests1617 {
 		//Esperamos a que se cargue la pagina de admin y clickamos en listar usuarios
 		WebElement listaUsers = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
 		listaUsers.click();
+		Thread.sleep(1000);
 		//Ahora que visualizamos la lista de usuarios deshabilitamos a john
-		WebElement deshabJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[2]/td[5]/a", 3).get(0);
+		WebElement deshabJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/div[1]/form[2]/div/div[3]/table/tbody/tr[2]/td[5]/a", 3).get(0);
 		deshabJohn.click();
 		Thread.sleep(1000);
 		//Salimos de sesion con el admin
-		WebElement signOut = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		WebElement signOut = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form/div/ul/li[3]/a/span", 2).get(0);
 		signOut.click();
 		Thread.sleep(1000);
 		//Una vez hecho volvemos a habilitarlo para realizar la posterior prueba
@@ -191,11 +193,12 @@ public class PlantillaSDI2_Tests1617 {
 		Thread.sleep(1000);
 		WebElement listaUsers2 = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[1]/a/span", 2).get(0);
 		listaUsers2.click();
-		WebElement habJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[2]/td[5]/a", 3).get(0);
+		WebElement habJohn = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/div[1]/form[2]/div/div[3]/table/tbody/tr[2]/td[5]/a", 3).get(0);
 		habJohn.click();
 		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Se ha habilitado un usuario.");
 		//Ahora cerramos sesion y la iniciamos como john, que al estar habilitado deberia dejarnos
-		WebElement signOut2 = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[1]/div/ul/li[2]/a/span", 2).get(0);
+		WebElement signOut2 = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form/div/ul/li[3]/a/span", 2).get(0);
 		signOut2.click();
 		Thread.sleep(1000);
 		//Entramos como John
@@ -300,6 +303,7 @@ public class PlantillaSDI2_Tests1617 {
 		WebElement deleteUser = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[4]/td[6]/a", 2).get(0);
 		deleteUser.click();
 		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Se ha borrado el usuario.");
 		SeleniumUtils.textoNoPresentePagina(driver, "hola@hola.com");
 		SeleniumUtils.textoNoPresentePagina(driver, "hola");
 		SeleniumUtils.textoNoPresentePagina(driver, "15");
@@ -330,6 +334,7 @@ public class PlantillaSDI2_Tests1617 {
 		//Rellenamos los campos correctamente para el alta de un usuario
 		new PO_RegisterForm().rellenaFormulario(driver, "PruebaAlta", "pruebaA@mail.com", "prueba12", "prueba12");
 		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Te has registrado satisfactoriamente.");
 		//Accedemos con el usuario que acabamos de crear para comprobar que de verdad lo creamos
 		new PO_LoginForm().rellenaFormulario(driver, "PruebaAlta", "prueba12");
 		Thread.sleep(1000);
@@ -352,6 +357,7 @@ public class PlantillaSDI2_Tests1617 {
 		//Rellenamos los campos correctamente para el alta de un usuario
 		new PO_RegisterForm().rellenaFormulario(driver, "mary", "pruebaB@mail.com", "prueba123", "prueba123");
 		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Ya existe el login escogido, inténtelo de nuevo.");
 		//No se creo el alumno porque mary ya existe
 		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
 		//Habría que mostrar un mensaje y probarlo ahora
@@ -383,6 +389,7 @@ public class PlantillaSDI2_Tests1617 {
 		//No se creo el alumno porque el mail es incorrecto
 		SeleniumUtils.textoPresentePagina(driver, "Alta de un alumno");
 		SeleniumUtils.textoPresentePagina(driver, "La contraseña ha de tener minimo 8 caracteres conteniendo letras y números");
+		SeleniumUtils.textoPresentePagina(driver, "Las contraseñas han de ser iguales, inténtelo de nuevo.");
 	}
 	//USUARIO
 	//PR16: Comprobar que en Inbox sólo aparecen listadas las tareas sin categoría y que son las que tienen que. Usar paginación navegando por las tres páginas.
@@ -644,6 +651,7 @@ public class PlantillaSDI2_Tests1617 {
 		By boton = By.id("form-principal:botonGuardar");
 		driver.findElement(boton).click();
 		Thread.sleep(1000);
+		SeleniumUtils.textoPresentePagina(driver, "Se ha añadido la tarea correctamente.");
 		List<Task> tareasInbox;
 		try {
 			tareasInbox = Factories.services.getTaskService().findInboxTasksByUserId((long) 1);
@@ -791,6 +799,7 @@ public class PlantillaSDI2_Tests1617 {
 		WebElement boton = SeleniumUtils.EsperaCargaPaginaxpath(driver, "/html/body/form[2]/div/div[2]/table/tbody/tr[5]/td/input", 2).get(0);
 		boton.click();
 		Thread.sleep(2000);
+		SeleniumUtils.textoPresentePagina(driver, "Se ha modificado la tarea correctamente.");
 		List<Task> tareasWeek;
 		try {
 			tareasWeek = Factories.services.getTaskService().findWeekTasksByUserId((long) 2);
